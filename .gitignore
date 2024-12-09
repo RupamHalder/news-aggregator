@@ -1,0 +1,68 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Environment variables
+.env
+*.env
+
+# Flask/Python Environment
+venv/
+ENV/
+env/
+*.egg-info/
+
+# Flask cache and session data
+instance/
+*.sqlite
+*.db
+
+# Alembic migrations
+migrations/
+
+# SQLAlchemy debug file
+sqlalchemy_debug.log
+
+# Pytest cache
+.pytest_cache/
+
+# Logs and runtime data
+*.log
+logs/
+*.pid
+*.cover
+.coverage
+htmlcov/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints
+
+# mypy
+.mypy_cache/
+
+# pyenv
+.python-version
+
+# Docker
+docker-compose*.yml
+Dockerfile
+
+# macOS
+.DS_Store
+
+# VSCode
+.vscode/
+*.code-workspace
+
+# Pycharm
+.idea/
+
+# Secrets and sensitive files
+app_credentials.json
+
+# Script to run the application
+run.sh
