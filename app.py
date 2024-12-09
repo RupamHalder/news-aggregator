@@ -1,12 +1,12 @@
 from flask import Flask, redirect, url_for
 from flask_wtf.csrf import CSRFProtect, CSRFError
 
+from conf_enviroment.conf_env import config
 from controller.web_controller.page_controller import page_controller
 from utils.utility import get_response
 
 app = Flask(__name__)
-app.config[
-    'SECRET_KEY'] = 'dZwwMGShspJPSCjuwty4nbGOQPlzhXcA#^b03h&y%S|2>vGyVr=e*@Z_b1<{'
+app.config['SECRET_KEY'] = config.SECRET_KEY
 csrf = CSRFProtect(app)
 
 app.register_blueprint(page_controller)
