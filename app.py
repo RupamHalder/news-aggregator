@@ -12,12 +12,6 @@ csrf = CSRFProtect(app)
 app.register_blueprint(page_controller)
 
 
-@app.route('/')
-def index():
-    # Home page content
-    return redirect(url_for('page_controller.dashboard'))
-
-
 @app.errorhandler(CSRFError)
 def handle_csrf_error(e):
     print("CSRF Error: " + e.description)

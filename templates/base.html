@@ -4,9 +4,9 @@
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>Blog - Active Bootstrap Template</title>
-    <meta name="description" content="">
-    <meta name="keywords" content="">
+    <title>{{ page_info.get('title') }}</title>
+    <meta name="description" content="{{ page_info.get('description') }}">
+    <meta name="keywords" content="{{ page_info.get('keywords') }}">
 
     <!-- Favicons -->
     <link href="{{ url_for('static', filename='assets/img/favicon.png') }}" rel="icon">
@@ -28,168 +28,179 @@
     <!-- Main CSS File -->
     <link href="{{ url_for('static', filename='assets/css/main.css') }}" rel="stylesheet">
 
-    <!-- =======================================================
-    * Template Name: Active
-    * Template URL: https://bootstrapmade.com/active-bootstrap-website-template/
-    * Updated: Aug 07 2024 with Bootstrap v5.3.3
-    * Author: BootstrapMade.com
-    * License: https://bootstrapmade.com/license/
-    ======================================================== -->
+    <!-- Custom CSS File -->
+    <link href="{{ url_for('static', filename='custom/css/custom_css.css') }}" rel="stylesheet">
+
+    <!--Toaster-->
+    <link href="{{ url_for('static', filename='assets/vendor/toaster/jquery.toast.min.css') }}" rel="stylesheet">
+
 </head>
 
 <body class="blog-page">
 
-<header id="header" class="header d-flex align-items-center sticky-top">
-    <div class="container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
-
-        <a href="index.html" class="logo d-flex align-items-center">
+<div class="container-fluid d-flex" style="height: 100vh;">
+    <!-- Sidebar -->
+    {% if sidebar_visible %}
+    <aside id="sidebar" class="sidebar p-3 bg-light">
+        <a href="/" class="logo d-flex align-items-center">
             <!-- Uncomment the line below if you also wish to use an image logo -->
             <!-- <img src="{{ url_for('static', filename='assets/img/logo.png') }}" alt=""> -->
-            <h1 class="sitename">Active.</h1>
+            <h3 class="sitename">{{ page_info.get('app_name') }}</h3>
         </a>
+        <hr>
+        <ul class="nav nav-pills flex-column mb-auto">
+            <li class="nav-item mt-2">
+                <a href="/" class="nav-link active" aria-current="page">
+                    <i class="bi bi-house-door me-2"></i>
+                    Home
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="javascript:void(0)" class="nav-link link-dark"
+                   onclick="showCommingSoon();"
+                >
+                    <i class="bi bi-speedometer2 me-2"></i>
+                    Dashboard
+                </a>
+            </li>
+        </ul>
+    </aside>
+    {% endif %}
 
-        <nav id="navmenu" class="navmenu">
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="about.html">About</a></li>
-                <li><a href="services.html">Services</a></li>
-                <li><a href="portfolio.html">Portfolio</a></li>
-                <li><a href="team.html">Team</a></li>
-                <li><a href="blog.html" class="active">Blog</a></li>
-                <li class="dropdown"><a href="#"><span>Dropdown</span> <i
-                        class="bi bi-chevron-down toggle-dropdown"></i></a>
+    <!-- Main Content -->
+    <main id="main-content" class="flex-grow-1">
+        {% if not sidebar_visible %}
+        <header id="header" class="header d-flex align-items-center sticky-top">
+            <div class="container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
+
+                <a href="/" class="logo d-flex align-items-center">
+                    <!-- Uncomment the line below if you also wish to use an image logo -->
+                    <!-- <img src="{{ url_for('static', filename='assets/img/logo.png') }}" alt=""> -->
+                    <h1 class="sitename">{{ page_info.get('app_name') }}</h1>
+                </a>
+
+                <nav id="navmenu" class="navmenu">
                     <ul>
-                        <li><a href="#">Dropdown 1</a></li>
-                        <li class="dropdown"><a href="#"><span>Deep Dropdown</span> <i
-                                class="bi bi-chevron-down toggle-dropdown"></i></a>
-                            <ul>
-                                <li><a href="#">Deep Dropdown 1</a></li>
-                                <li><a href="#">Deep Dropdown 2</a></li>
-                                <li><a href="#">Deep Dropdown 3</a></li>
-                                <li><a href="#">Deep Dropdown 4</a></li>
-                                <li><a href="#">Deep Dropdown 5</a></li>
+                        <li><a href="/">Home</a></li>
+                        <li><a href="javascript:void(0)" onclick="showCommingSoon();">About</a></li>
+                        <li><a href="javascript:void(0)" onclick="showCommingSoon();">Contact</a></li>
+                    </ul>
+                    <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+                </nav>
+
+            </div>
+        </header>
+        {% endif %}
+        {% block content %}
+        <!-- Your main content goes here -->
+        {% endblock content %}
+        <footer id="footer" class="footer light-background">
+            <div class="container">
+                <div class="row g-4">
+                    <div class="col-md-8 col-lg-4 mb-3 mb-md-0">
+                        <div class="widget">
+                            <h3 class="widget-heading">About Us</h3>
+                            <p class="mb-4">
+                                There live the blind texts. Separated they live in Bookmarksgrove
+                                right at the coast of the Semantics, a large language ocean.
+                            </p>
+                            <p class="mb-0">
+                                <a href="#" class="btn-learn-more">Learn more</a>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-8 col-lg-4 ps-lg-5 mb-3 mb-md-0">
+                        <div class="widget">
+                            <h3 class="widget-heading">Navigation</h3>
+                            <ul class="list-unstyled float-start me-5">
+                                <li><a href="#">Overview</a></li>
                             </ul>
-                        </li>
-                        <li><a href="#">Dropdown 2</a></li>
-                        <li><a href="#">Dropdown 3</a></li>
-                        <li><a href="#">Dropdown 4</a></li>
-                    </ul>
-                </li>
-                <li><a href="contact.html">Contact</a></li>
-            </ul>
-            <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
-        </nav>
+                            <ul class="list-unstyled float-start me-5">
+                                <li><a href="#">About Us</a></li>
+                            </ul>
+                            <ul class="list-unstyled float-start">
+                                <li><a href="#">Services</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!--            <div class="col-md-6 col-lg-3 pl-lg-5">-->
+                    <!--                <div class="widget">-->
+                    <!--                    <h3 class="widget-heading">Recent Posts</h3>-->
+                    <!--                    <ul class="list-unstyled footer-blog-entry">-->
+                    <!--                        <li>-->
+                    <!--                            <span class="d-block date">May 3, 2020</span>-->
+                    <!--                            <a href="#">There live the Blind Texts</a>-->
+                    <!--                        </li>-->
+                    <!--                        <li>-->
+                    <!--                            <span class="d-block date">May 3, 2020</span>-->
+                    <!--                            <a href="#">Separated they live in Bookmarksgrove right</a>-->
+                    <!--                        </li>-->
+                    <!--                    </ul>-->
+                    <!--                </div>-->
+                    <!--            </div>-->
+                    <div class="col-md-8 col-lg-4 pl-lg-5">
+                        <div class="widget">
+                            <h3 class="widget-heading">Connect</h3>
+                            <ul class="list-unstyled social-icons light mb-3">
+                                <li class="me-5">
+                                    <a href="javascript:void(0)"><span class="bi bi-facebook"></span></a>
+                                </li>
+                                <li class="me-5">
+                                    <a href="javascript:void(0)"><span class="bi bi-twitter-x"></span></a>
+                                </li>
+                                <li class="me-5">
+                                    <a href="javascript:void(0)"><span class="bi bi-linkedin"></span></a>
+                                </li>
+                                <li class="me-5">
+                                    <a href="javascript:void(0)"><span class="bi bi-google"></span></a>
+                                </li>
+                            </ul>
+                        </div>
 
-    </div>
-</header>
+                        <!--                <div class="widget">-->
+                        <!--                    <div class="footer-subscribe">-->
+                        <!--                        <h3 class="widget-heading">Subscribe</h3>-->
+                        <!--                        <form action="forms/newsletter.php" method="post" class="php-email-form">-->
+                        <!--                            <div class="mb-2">-->
+                        <!--                                <input type="text" class="form-control" name="email" placeholder="Enter your email">-->
 
-{% block content %}
+                        <!--                                <button type="submit" class="btn btn-link">-->
+                        <!--                                    <span class="bi bi-arrow-right"></span>-->
+                        <!--                                </button>-->
+                        <!--                            </div>-->
+                        <!--                            <div class="loading">Loading</div>-->
+                        <!--                            <div class="error-message"></div>-->
+                        <!--                            <div class="sent-message">-->
+                        <!--                                Your subscription request has been sent. Thank you!-->
+                        <!--                            </div>-->
+                        <!--                        </form>-->
+                        <!--                    </div>-->
+                        <!--                </div>-->
+                    </div>
+                </div>
 
-{% endblock content %}
-
-<footer id="footer" class="footer light-background">
-    <div class="container">
-        <div class="row g-4">
-            <div class="col-md-8 col-lg-4 mb-3 mb-md-0">
-                <div class="widget">
-                    <h3 class="widget-heading">About Us</h3>
-                    <p class="mb-4">
-                        There live the blind texts. Separated they live in Bookmarksgrove
-                        right at the coast of the Semantics, a large language ocean.
+                <div class="copyright d-flex flex-column flex-md-row align-items-center justify-content-md-between">
+                    <p>© <span>Copyright</span> <strong class="px-1 sitename">Active.</strong>
+                        <span>All Rights Reserved</span>
                     </p>
-                    <p class="mb-0">
-                        <a href="#" class="btn-learn-more">Learn more</a>
-                    </p>
+                    <div class="credits">
+                        <!-- All the links in the footer should remain intact. -->
+                        <!-- You can delete the links only if you've purchased the pro version. -->
+                        <!-- Licensing information: https://bootstrapmade.com/license/ -->
+                        <!-- Purchase the pro version with working PHP/AJAX contact form: [buy-url] -->
+                        Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a> Distributed By <a
+                            href="https://themewagon.com">ThemeWagon</a>
+                    </div>
                 </div>
             </div>
-            <div class="col-md-8 col-lg-4 ps-lg-5 mb-3 mb-md-0">
-                <div class="widget">
-                    <h3 class="widget-heading">Navigation</h3>
-                    <ul class="list-unstyled float-start me-5">
-                        <li><a href="#">Overview</a></li>
-                    </ul>
-                    <ul class="list-unstyled float-start me-5">
-                        <li><a href="#">About Us</a></li>
-                    </ul>
-                    <ul class="list-unstyled float-start">
-                        <li><a href="#">Services</a></li>
-                    </ul>
-                </div>
-            </div>
-            <!--            <div class="col-md-6 col-lg-3 pl-lg-5">-->
-            <!--                <div class="widget">-->
-            <!--                    <h3 class="widget-heading">Recent Posts</h3>-->
-            <!--                    <ul class="list-unstyled footer-blog-entry">-->
-            <!--                        <li>-->
-            <!--                            <span class="d-block date">May 3, 2020</span>-->
-            <!--                            <a href="#">There live the Blind Texts</a>-->
-            <!--                        </li>-->
-            <!--                        <li>-->
-            <!--                            <span class="d-block date">May 3, 2020</span>-->
-            <!--                            <a href="#">Separated they live in Bookmarksgrove right</a>-->
-            <!--                        </li>-->
-            <!--                    </ul>-->
-            <!--                </div>-->
-            <!--            </div>-->
-            <div class="col-md-8 col-lg-4 pl-lg-5">
-                <div class="widget">
-                    <h3 class="widget-heading">Connect</h3>
-                    <ul class="list-unstyled social-icons light mb-3">
-                        <li class="me-5">
-                            <a href="javascript:void(0)"><span class="bi bi-facebook"></span></a>
-                        </li>
-                        <li class="me-5">
-                            <a href="javascript:void(0)"><span class="bi bi-twitter-x"></span></a>
-                        </li>
-                        <li class="me-5">
-                            <a href="javascript:void(0)"><span class="bi bi-linkedin"></span></a>
-                        </li>
-                        <li class="me-5">
-                            <a href="javascript:void(0)"><span class="bi bi-google"></span></a>
-                        </li>
-                    </ul>
-                </div>
+        </footer>
 
-                <!--                <div class="widget">-->
-                <!--                    <div class="footer-subscribe">-->
-                <!--                        <h3 class="widget-heading">Subscribe</h3>-->
-                <!--                        <form action="forms/newsletter.php" method="post" class="php-email-form">-->
-                <!--                            <div class="mb-2">-->
-                <!--                                <input type="text" class="form-control" name="email" placeholder="Enter your email">-->
-
-                <!--                                <button type="submit" class="btn btn-link">-->
-                <!--                                    <span class="bi bi-arrow-right"></span>-->
-                <!--                                </button>-->
-                <!--                            </div>-->
-                <!--                            <div class="loading">Loading</div>-->
-                <!--                            <div class="error-message"></div>-->
-                <!--                            <div class="sent-message">-->
-                <!--                                Your subscription request has been sent. Thank you!-->
-                <!--                            </div>-->
-                <!--                        </form>-->
-                <!--                    </div>-->
-                <!--                </div>-->
-            </div>
-        </div>
-
-        <div class="copyright d-flex flex-column flex-md-row align-items-center justify-content-md-between">
-            <p>© <span>Copyright</span> <strong class="px-1 sitename">Active.</strong> <span>All Rights Reserved</span>
-            </p>
-            <div class="credits">
-                <!-- All the links in the footer should remain intact. -->
-                <!-- You can delete the links only if you've purchased the pro version. -->
-                <!-- Licensing information: https://bootstrapmade.com/license/ -->
-                <!-- Purchase the pro version with working PHP/AJAX contact form: [buy-url] -->
-                Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a> Distributed By <a
-                    href="https://themewagon.com">ThemeWagon</a>
-            </div>
-        </div>
-    </div>
-</footer>
-
-<!-- Scroll Top -->
-<a href="javascript:void(0)" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i
-        class="bi bi-arrow-up-short"></i></a>
+        <!-- Scroll Top -->
+        <a href="javascript:void(0)" id="scroll-top"
+           class="scroll-top d-flex align-items-center justify-content-center"><i
+                class="bi bi-arrow-up-short"></i></a>
+    </main>
+</div>
 
 <!-- Preloader -->
 <div id="preloader"></div>
@@ -206,6 +217,18 @@
 
 <!-- Main JS File -->
 <script src="{{ url_for('static', filename='assets/js/main.js') }}"></script>
+
+<!-- Jquery JS -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/ui/1.14.1/jquery-ui.min.js"
+        integrity="sha256-AlTido85uXPlSyyaZNsjJXeCs07eSv3r43kyCVc8ChI=" crossorigin="anonymous"></script>
+
+<!--Toaster-->
+<script src="{{ url_for('static', filename='assets/vendor/toaster/jquery.toast.min.js') }}" type="text/javascript"></script>
+
+<!-- Global JS -->
+<script src="{{ url_for('static', filename='custom/js/global.js') }}" type="text/javascript"></script>
 
 </body>
 

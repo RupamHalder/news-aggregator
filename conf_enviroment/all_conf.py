@@ -19,6 +19,8 @@ class AllConf:
                 'DB_PASSWORD') or ''
             DB_HOST = app_credentials.get(
                 'DB_HOST') or ''
+            APP_NAME = app_credentials.get(
+                'APP_NAME') or ''
     else:
         print("app_credentials.json not found. "
               "Please create it and put your app credentials there.")

@@ -6,15 +6,16 @@
     <!-- Page Title -->
     <div class="page-title light-background">
         <div class="container">
-            <h1>Blog</h1>
-            <nav class="breadcrumbs">
-                <ol>
-                    <li><a href="index.html">Home</a></li>
-                    <li class="current">Blog</li>
-                </ol>
-            </nav>
+            <h1>{{ page_info.get('page_heading') }}</h1>
+            <!--            <nav class="breadcrumbs">-->
+            <!--                <ol>-->
+            <!--                    <li><a href="index.html">Home</a></li>-->
+            <!--                    <li class="current">Blog</li>-->
+            <!--                </ol>-->
+            <!--            </nav>-->
         </div>
-    </div><!-- End Page Title -->
+    </div>
+    <!-- End Page Title -->
 
     <!-- Blog Posts 2 Section -->
     <section id="blog-posts-2" class="blog-posts-2 section">
@@ -34,7 +35,8 @@
                     <article>
 
                         <div class="post-img">
-                            <img src="{% if article.urlToImage %}{{ article.urlToImage }}{% else %}{{ url_for('static', filename='assets/img/no-image.jpg') }}{% endif %}" alt="" class="img-fluid">
+                            <img src="{% if article.urlToImage %}{{ article.urlToImage }}{% else %}{{ url_for('static', filename='assets/img/no-image.jpg') }}{% endif %}"
+                                 alt="" class="img-fluid">
                         </div>
 
                         <div class="meta-top">

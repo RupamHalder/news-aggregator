@@ -1,0 +1,39 @@
+.container-fluid {
+    display: flex;
+}
+
+.sidebar {
+    width: 300px;
+    min-height: 100vh;
+    border-right: 1px solid #ddd;
+    background-color: #f8f9fa;
+    overflow-y: auto; /* Enable vertical scrolling */
+    position: sticky;
+    top: 0;
+}
+
+#main-content {
+    flex-grow: 1;
+    overflow-y: auto;
+}
+
+/* Default color for nav-pills links */
+.nav-pills .nav-link {
+    color: #ffffff; /* Text color */
+    background-color: rgba(var(--bs-light-rgb), var(--bs-bg-opacity)); /* Default background color */
+    border-radius: 0.5rem; /* Optional rounded corners */
+    padding: 0.7rem 1rem;
+}
+
+/* Hover state */
+.nav-pills .nav-link:hover {
+    color: #ffffff; /* Text color on hover */
+    background-color: rgb(207 255 209); /* Darker shade for hover */
+}
+
+/* Active state */
+.nav-pills .nav-link.active {
+    color: #ffffff; /* Text color when active */
+    background-color: #28a745; /* Different color for active state */
+}
+
