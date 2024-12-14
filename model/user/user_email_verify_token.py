@@ -1,9 +1,11 @@
 import traceback
 
 from sqlalchemy import Column, Integer, Text, String, ForeignKey
+from sqlalchemy.orm import joinedload
 
 from database.db_conn import Base, engine
 from database.db_session import session
+from model.user.user import User
 
 
 class UserEmailVerifyToken(Base):
@@ -54,6 +56,49 @@ def add_email_verify_token(user_ag_id, token,
         session.rollback()
         traceback.print_exc()
         return False
+    finally:
+        session.close()
+
+
+def update_token_data_object(token_data):
+    try:
+        session.merge(token_data)
+        session.commit()
+        return True
+    except Exception as e:
+        session.rollback()
+        traceback.print_exc()
+        return False
+    finally:
+        session.close()
+
+
+def get_token_data_by_token(token):
+    try:
+        token_data = session.query(UserEmailVerifyToken).filter_by(
+            token=token).first()
+        return token_data
+    except Exception as e:
+        traceback.print_exc()
+        return None
+    finally:
+        session.close()
+
+
+def get_token_data_by_email(email):
+    try:
+        result = (
+            session.query(UserEmailVerifyToken)
+            .join(User, User.user_ag_id == UserEmailVerifyToken.user_ag_id)
+            .filter(User.username == email)
+            .options(joinedload(UserEmailVerifyToken.user))
+            .first()
+        )
+
+        return result
+    except Exception as e:
+        traceback.print_exc()
+        return None
     finally:
         session.close()
 

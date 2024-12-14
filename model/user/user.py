@@ -6,7 +6,8 @@ from sqlalchemy.orm import relationship
 
 from database.db_conn import Base, engine
 from database.db_session import session
-from utils.utility import generate_auto_id, datetime_to_string
+from utils.utility import generate_auto_id, datetime_to_string, \
+    encryption_sha_256
 
 
 class User(Base):
@@ -50,11 +51,13 @@ class User(Base):
         }
 
 
-def add_user(username=None, password=None):
+def add_user(user_ag_id=None, username=None, password=None):
     try:
-        if not username or not password:
+        if username is None or password is None:
             return False
-        user_ag_id = generate_auto_id(prefix="user", length=32)
+        if user_ag_id is None:
+            user_ag_id = generate_auto_id(prefix="user", length=32)
+        password = encryption_sha_256(password)
         user = User(user_ag_id=user_ag_id, username=username,
                     password=password)
         session.add(user)
@@ -63,6 +66,52 @@ def add_user(username=None, password=None):
     except:
         print(traceback.format_exc())
         session.rollback()
+        return False
+    finally:
+        session.close()
+
+
+def update_is_verified(user_ag_id, is_verified):
+    try:
+        user = session.query(User).filter_by(user_ag_id=user_ag_id).first()
+        if user is not None:
+            user.is_verified = is_verified
+            user.updated_at = datetime.now()
+            session.commit()
+            return True
+        else:
+            return False
+    except:
+        session.rollback()
+        print(traceback.format_exc())
+        return False
+    finally:
+        session.close()
+
+
+def is_username_exist(username):
+    try:
+        user_count = session.query(User).filter_by(username=username).count()
+        return user_count > 0
+    except:
+        print(traceback.format_exc())
+        return False
+    finally:
+        session.close()
+
+
+def is_email_verified(email):
+    try:
+        user_count = session.query(
+            User
+        ).filter_by(
+            username=email
+        ).filter_by(
+            is_verified=True
+        ).count()
+        return user_count > 0
+    except:
+        print(traceback.format_exc())
         return False
     finally:
         session.close()
