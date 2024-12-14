@@ -3,7 +3,6 @@ from conf_enviroment.conf_env import config
 
 def get_page_info(page_name):
     if page_name == 'index':
-        print("home_page_info: ", home_page_info())
         return home_page_info()
     else:
         return page_not_found_info()

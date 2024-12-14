@@ -16,12 +16,18 @@ class User(Base):
     username = Column(String(150), unique=True, nullable=False)
     password = Column(String(150), nullable=False)
 
+    is_verified = Column(Boolean, default=False)
     status = Column(Boolean, default=True)
     is_deleted = Column(Boolean, default=False)
 
     created_at = Column(DateTime, default=datetime.now())
     updated_at = Column(DateTime, default=datetime.now())
 
+    email_verify_tokens = relationship('UserEmailVerifyToken', backref='user',
+                                       lazy=True)
+    forget_password_tokens = relationship('UserForgetPasswordToken',
+                                          backref='user', lazy=True)
+    user_details = relationship('UserDetails', backref='user', uselist=False)
     saved_articles = relationship('SavedArticle', backref='user',
                                   lazy=True)
 
