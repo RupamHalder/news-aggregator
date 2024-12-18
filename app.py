@@ -3,6 +3,7 @@ from flask_wtf.csrf import CSRFProtect, CSRFError
 
 from conf_enviroment.conf_env import config
 from controller.web_controller.page_controller import page_controller
+from controller.web_controller.user.user_controller import user_controller
 from utils.utility import get_response
 
 app = Flask(__name__)
@@ -10,6 +11,7 @@ app.config['SECRET_KEY'] = config.SECRET_KEY
 csrf = CSRFProtect(app)
 
 app.register_blueprint(page_controller)
+app.register_blueprint(user_controller)
 
 
 @app.errorhandler(CSRFError)

@@ -5,3 +5,4 @@ alembic==1.14.0
 textblob==0.18.0.post0
 newsapi-python==0.2.7
 flask-wtf==1.2.2
+PyMySQL==1.1.1
