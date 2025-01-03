@@ -37,6 +37,12 @@ def index():
                            category=category,
                            page_info=get_page_info('index'))
 
+# =================== User Registration ===================
+@page_controller.route('/login')
+def login_page():
+    return render_template('user/login.html',
+                           page_info=get_page_info('login'))
+
 
 # Post email verification page
 @page_controller.route('/email-verify/<token>', methods=['GET'])

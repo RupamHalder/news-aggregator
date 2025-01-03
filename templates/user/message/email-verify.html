@@ -2,12 +2,22 @@
 {% block content %}
 
 <main class="main text-center h-50">
-    <h1>Cover your page.</h1>
-    <p class="lead">Cover is a one-page template for building simple and beautiful home pages. Download, edit the text,
-        and add your own fullscreen background photo to make it your own.</p>
+    <h1>
+        {% if message_type == 'error' %}
+            Oops!
+        {% elif message_type == 'success' %}
+            Great!
+        {% else %}
+            Oops!
+        {% endif %}
+    </h1>
+    <p class="lead text-{% if message_type == 'error' %}danger{% else %}{{ message_type }}{% endif %}">
+        {{ message }}
+    </p>
     <p class="lead">
-        <a href="#" class="btn btn-lg btn-secondary fw-bold border-white bg-white">Learn more</a>
+        <a href="/" class="btn btn-lg btn-secondary fw-bold border-white">Go Back</a>
     </p>
 </main>
+
 
 {% endblock content %}
