@@ -6,6 +6,8 @@ def get_page_info(page_name):
         return home_page_info()
     if page_name == 'login':
         return login_page_info()
+    if page_name == 'register':
+        return register_page_info()
     else:
         return page_not_found_info()
 
@@ -39,4 +41,14 @@ def login_page_info():
         'title': f"{config.APP_NAME} - Login" if config.APP_NAME else 'Login',
         'description': 'Login Page',
         'keywords': 'News Aggregator Login'
+    }
+
+
+def register_page_info():
+    return {
+        'app_name': config.APP_NAME or '',
+        'page_heading': 'Register',
+        'title': f"{config.APP_NAME} - Register" if config.APP_NAME else 'Register',
+        'description': 'Registration Page',
+        'keywords': 'News Aggregator Register'
     }

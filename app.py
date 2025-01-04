@@ -11,7 +11,7 @@ app.config['SECRET_KEY'] = config.SECRET_KEY
 csrf = CSRFProtect(app)
 
 app.register_blueprint(page_controller)
-app.register_blueprint(user_controller)
+app.register_blueprint(user_controller, url_prefix='/api/v1/user')
 
 
 @app.errorhandler(CSRFError)

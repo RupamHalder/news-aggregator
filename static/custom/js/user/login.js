@@ -1,16 +1,10 @@
+import { LoginJsFunctions, CommonJsFunctions } from '../globalFunctions.js';
+
 $(document).ready(function() {
+    const loginFunctions = new LoginJsFunctions();
+    const globalFunctions = new CommonJsFunctions();
+
     $(document).on('click', '#togglePassword', function(){
-        togglePasswordVisibility();
+        globalFunctions.togglePasswordVisibility(this);
     });
 });
-
-function togglePasswordVisibility(){
-    if ($("#togglePassword i").attr("class") == "bi bi-eye") {
-        $("#togglePassword i").attr("class", "bi bi-eye-slash");
-        $("#password").attr("type", "password");
-    }
-    else if ($("#togglePassword i").attr("class") == "bi bi-eye-slash") {
-        $("#togglePassword i").attr("class", "bi bi-eye");
-        $("#password").attr("type", "text");
-    }
-}

@@ -21,6 +21,10 @@ class AllConf:
                 'DB_HOST') or ''
             APP_NAME = app_credentials.get(
                 'APP_NAME') or ''
+            SMTP_USERNAME = app_credentials.get(
+                'SMTP_USERNAME') or ''
+            SMTP_PASSWORD = app_credentials.get(
+                'SMTP_PASSWORD') or ''
     else:
         print("app_credentials.json not found. "
               "Please create it and put your app credentials there.")

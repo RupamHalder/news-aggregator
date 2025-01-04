@@ -3,11 +3,13 @@ import traceback
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
+from conf_enviroment.conf_env import config
+
 # SMTP configuration
-SMTP_SERVER = 'smtp.example.com'
+SMTP_SERVER = 'smtp.gmail.com'
 SMTP_PORT = 587
-SMTP_USERNAME = 'your-email@example.com'
-SMTP_PASSWORD = 'your-password'
+SMTP_USERNAME = config.SMTP_USERNAME
+SMTP_PASSWORD = config.SMTP_PASSWORD
 
 
 def send_email(subject, recipient, body):

@@ -66,3 +66,7 @@ app_credentials.json
 
 # Script to run the application
 run.sh
+
+# Python file for trying out functions to
+# check if they are properly working or not
+try_out_functions.py
