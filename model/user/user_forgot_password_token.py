@@ -50,6 +50,7 @@ def add_forget_password_token(user_ag_id, token,
         return True
     except Exception as e:
         session.rollback()
+        print("Error in add_forget_password_token model function: ", e)
         traceback.print_exc()
         return False
     finally:

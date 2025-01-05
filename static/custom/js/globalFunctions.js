@@ -4,6 +4,63 @@ export class LoginJsFunctions {
 
 export class RegisterJsFunctions {
     constructor() {}
+
+    registerUser(registerButton) {
+        $(registerButton).prop('disabled', true);
+        $(registerButton).html('Registering...');
+
+        $.ajax({
+            type: 'POST',
+            url: '/api/v1/user/register',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrfToken"]').attr('content')
+            },
+            contentType: 'application/json',
+            data: JSON.stringify({
+                email: $('#email').val(),
+                password: $('#password').val(),
+                conf_password: $('#conf_password').val()
+            }),
+            success: function(response) {
+                $(registerButton).prop('disabled', false);
+                $(registerButton).html('Register');
+                if (response.status) {
+                    $.toast({
+                        heading: 'Success',
+                        text: response.message,
+                        icon: 'success',
+                        loader: true,        // Change it to false to disable loader
+                        loaderBg: '#9EC600',  // Change it to false to disable loader
+                        position: 'top-right',
+                        afterHidden: function () {
+                            window.location.href = '/login';
+                        }
+                    });
+                } else {
+                    $.toast({
+                        heading: 'Error',
+                        text: response.message,
+                        icon: 'error',
+                        loader: true,        // Change it to false to disable loader
+                        loaderBg: '#9EC600',  // Change it to false to disable loader
+                        position: 'top-right'
+                    });
+                }
+            },
+            error: function(xhr, status, error) {
+                $(registerButton).prop('disabled', false);
+                $(registerButton).html('Register');
+                $.toast({
+                    heading: 'Error',
+                    text: xhr.responseJSON.message,
+                    icon: 'error',
+                    loader: true,        // Change it to false to disable loader
+                    loaderBg: '#9EC600',  // Change it to false to disable loader
+                    position: 'top-right'
+                });
+            }
+        });
+    }
 }
 
 // common functions

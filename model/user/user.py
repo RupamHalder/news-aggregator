@@ -24,14 +24,6 @@ class User(Base):
     created_at = Column(DateTime, default=datetime.now())
     updated_at = Column(DateTime, default=datetime.now())
 
-    email_verify_tokens = relationship('UserEmailVerifyToken', backref='user',
-                                       lazy=True)
-    forget_password_tokens = relationship('UserForgetPasswordToken',
-                                          backref='user', lazy=True)
-    user_details = relationship('UserDetails', backref='user', uselist=False)
-    saved_articles = relationship('SavedArticle', backref='user',
-                                  lazy=True)
-
     def __init__(self, user_ag_id=None, username=None, password=None):
         self.user_ag_id = user_ag_id
         self.username = username
@@ -64,6 +56,7 @@ def add_user(user_ag_id=None, username=None, password=None):
         session.commit()
         return True
     except:
+        print("Error in add_user model function:")
         print(traceback.format_exc())
         session.rollback()
         return False
@@ -83,6 +76,7 @@ def update_is_verified(user_ag_id, is_verified):
             return False
     except:
         session.rollback()
+        print("Error in update_is_verified model function:")
         print(traceback.format_exc())
         return False
     finally:
@@ -94,6 +88,7 @@ def is_username_exist(username):
         user_count = session.query(User).filter_by(username=username).count()
         return user_count > 0
     except:
+        print("Error in is_username_exist model function:")
         print(traceback.format_exc())
         return False
     finally:
@@ -111,6 +106,7 @@ def is_email_verified(email):
         ).count()
         return user_count > 0
     except:
+        print("Error in is_email_verified model function:")
         print(traceback.format_exc())
         return False
     finally:

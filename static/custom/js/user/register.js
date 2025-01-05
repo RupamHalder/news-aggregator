@@ -7,4 +7,8 @@ $(document).ready(function() {
     $(document).on('click', '.togglePassword', function(){
         globalFunctions.togglePasswordVisibility(this);
     });
+
+    $(document).on('click', '#btnRegister', function(){
+        registerFunctions.registerUser(this);
+    });
 });

@@ -7,6 +7,7 @@
     <title>{{ page_info.get('title') }}</title>
     <meta name="description" content="{{ page_info.get('description') }}">
     <meta name="keywords" content="{{ page_info.get('keywords') }}">
+    <meta name="csrfToken" content="{{ csrf_token() }}">
 
     <!-- Favicons -->
     <link href="{{ url_for('static', filename='assets/img/favicon.png') }}" rel="icon">

@@ -47,6 +47,7 @@ def add_user_details(user_ag_id, first_name, last_name, phone_no, profile_pic):
         return True
     except Exception as e:
         session.rollback()
+        print("Error in add_user_details model function: ", e)
         traceback.print_exc()
         return False
     finally:

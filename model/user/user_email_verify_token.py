@@ -54,6 +54,7 @@ def add_email_verify_token(user_ag_id, token,
         return True
     except Exception as e:
         session.rollback()
+        print("Error in add_email_verify_token model function: ", e)
         traceback.print_exc()
         return False
     finally:
@@ -67,6 +68,7 @@ def update_token_data_object(token_data):
         return True
     except Exception as e:
         session.rollback()
+        print("Error in update_token_data_object model function: ", e)
         traceback.print_exc()
         return False
     finally:
@@ -79,6 +81,7 @@ def get_token_data_by_token(token):
             token=token).first()
         return token_data
     except Exception as e:
+        print("Error in get_token_data_by_token model function: ", e)
         traceback.print_exc()
         return None
     finally:
@@ -97,6 +100,7 @@ def get_token_data_by_email(email):
 
         return result
     except Exception as e:
+        print("Error in get_token_data_by_email model function: ", e)
         traceback.print_exc()
         return None
     finally:

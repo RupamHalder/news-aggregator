@@ -1,5 +1,6 @@
 from flask import Flask, redirect, url_for
 from flask_wtf.csrf import CSRFProtect, CSRFError
+from flask_cors import CORS
 
 from conf_enviroment.conf_env import config
 from controller.web_controller.page_controller import page_controller
@@ -9,6 +10,7 @@ from utils.utility import get_response
 app = Flask(__name__)
 app.config['SECRET_KEY'] = config.SECRET_KEY
 csrf = CSRFProtect(app)
+CORS(app)
 
 app.register_blueprint(page_controller)
 app.register_blueprint(user_controller, url_prefix='/api/v1/user')
