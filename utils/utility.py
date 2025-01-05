@@ -3,6 +3,8 @@ import time
 import uuid
 import hashlib
 
+from constants.messages import UserMessages
+
 
 def get_current_time_milli_sec():
     return round(time.time() * 1000)
@@ -61,17 +63,17 @@ def is_email_valid(email):
 
 def check_password_validity(password):
     if len(password) < 8:
-        return False, "Password must be at least 8 characters long."
+        return False, UserMessages.INVALID_PASS_LENGTH
     elif not any(char.isdigit() for char in password):
-        return False, "Password must contain at least one digit."
+        return False, UserMessages.REQUIRE_DIGIT_IN_PASS
     elif not any(char.isupper() for char in password):
-        return False, "Password must contain at least one uppercase letter."
+        return False, UserMessages.REQUIRE_UPPER_IN_PASS
     elif not any(char.islower() for char in password):
-        return False, "Password must contain at least one lowercase letter."
+        return False, UserMessages.REQUIRE_LOWER_IN_PASS
     elif not any(char in "`~!@#$%^&*()-+_={}[]|\\:;\"'<>?,./" for char in password):
-        return False, "Password must contain at least one special character."
+        return False, UserMessages.REQUIRE_SPECIAL_IN_PASS
     else:
-        return True, "Password is valid."
+        return True, UserMessages.SUCCESS_PASS_VALID
 
 
 def is_param_empty(param):

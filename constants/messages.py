@@ -1,7 +1,22 @@
+class CommonMessages:
+    SUCCESS = '''Success.'''
+
+    FAIL_SOMETHING_WENT_WRONG = '''Something went wrong. Please try again later.'''
+
 class UserMessages:
-    USER_CREATED = 'User created successfully'
-    USER_DELETED = 'User deleted successfully'
-    USER_UPDATED = 'User updated successfully'
-    USER_NOT_FOUND = 'User not found'
-    USER_ALREADY_EXISTS = 'User already exists'
-    INVALID_LOGIN = 'Invalid login credentials'
+    REQUIRE_EMAIL_PASS = '''Email and password are required.'''
+    REQUIRE_DIGIT_IN_PASS = '''Password must contain at least one digit.'''
+    REQUIRE_UPPER_IN_PASS = '''Password must contain at least one uppercase letter.'''
+    REQUIRE_LOWER_IN_PASS = '''Password must contain at least one lowercase letter.'''
+    REQUIRE_SPECIAL_IN_PASS = '''Password must contain at least one special character.'''
+    
+    INVALID_EMAIL = '''Invalid email address.'''
+    INVALID_PASS_LENGTH = '''Password must be at least 8 characters long.'''
+    
+    EXISTS_EMAIL = '''Email already exists.'''
+    
+    SUCCESS_PASS_VALID = '''Password is valid.'''
+    SUCCESS_USER_REGISTRATION = '''User registered successfully. Verification email sent.'''
+
+    FAIL_USER_REGISTRATION = '''User registration failed.'''
+    FAIL_VERIFY_MAIL_SEND = '''Unable to send verification email.'''

@@ -1,3 +1,5 @@
+import traceback
+
 from flask import jsonify
 
 from flask import Blueprint, render_template, request
@@ -6,8 +8,12 @@ from model.user.user import add_user, is_username_exist, is_email_verified
 from model.user.user_email_verify_token import add_email_verify_token, \
     update_token_data_object, get_token_data_by_email
 from service.others.mail import send_email
+from service.web_service.user.user_service import register_service
 from utils.utility import is_email_valid, get_current_time_milli_sec, \
-    generate_token, generate_auto_id, check_password_validity
+    generate_token, generate_auto_id, check_password_validity, get_response
+from constants.messages import UserMessages, CommonMessages
+from validation.web_validation.user.user_validation import \
+    register_field_validation
 
 user_controller = Blueprint('user_controller', __name__)
 
@@ -20,55 +26,18 @@ MAXIMUM_TOKEN_REQUEST_COUNT = 3
 # Routes
 @user_controller.route('/register', methods=['POST'])
 def register():
-    data = request.get_json()
-    email = data.get('email')
-    password = data.get('password')
+    try:
+        field_validation, status_code = register_field_validation(request)
+        if field_validation['status']:
+            return register_service(field_validation['data'])
+        else:
+            return field_validation, status_code
 
-    if not email or not password:
-        return jsonify({'message': 'Email and password are required.'}), 400
-
-    if not is_email_valid(email):
-        return jsonify({'message': 'Invalid email address.'}), 400
-
-    if is_username_exist(email):
-        return jsonify({'message': 'Email already exists.'}), 400
-
-    is_password_valid, message = check_password_validity(password)
-    if not is_password_valid:
-        return jsonify({'message': message}), 400
-
-    user_ag_id = generate_auto_id(prefix="user", length=32)
-    is_user_added = add_user(user_ag_id=user_ag_id, username=email,
-                             password=password)
-
-    if not is_user_added:
-        return jsonify({'message': 'User registration failed.'}), 500
-
-    token = generate_token(32)
-    token_exp_timestamp = str(
-        get_current_time_milli_sec() + TOKEN_EXP_TIME_GAP * 1000)
-    token_request_count = 1
-    next_token_request_timestamp = str(
-        get_current_time_milli_sec() + TOKEN_ATTEMPT_TIME_GAP * 1000)
-
-    is_token_added = add_email_verify_token(user_ag_id, token,
-                                            token_exp_timestamp,
-                                            token_request_count,
-                                            next_token_request_timestamp)
-
-    if not is_token_added:
-        return jsonify({'message': 'User registration failed.'}), 500
-
-    verification_link = f"{BASE_URL}/email-verify/{token}"
-    email_body = f"Click the link to verify your email: {verification_link}"
-
-    is_email_sent = send_email('Verify Your Email', email, email_body)
-
-    if not is_email_sent:
-        return jsonify({'message': 'Unable to send verification email.'}), 500
-
-    return jsonify({
-        'message': 'User registered successfully. Verification email sent.'}), 200
+    except Exception as e:
+        print("Error in register API: " + str(e))
+        print(traceback.format_exc())
+        return get_response(False, CommonMessages.FAIL_SOMETHING_WENT_WRONG,
+                            {}), 500
 
 
 @user_controller.route('/resend-verification', methods=['POST'])
