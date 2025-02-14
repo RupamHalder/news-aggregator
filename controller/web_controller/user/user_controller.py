@@ -13,7 +13,7 @@ from utils.utility import is_email_valid, get_current_time_milli_sec, \
     generate_token, generate_auto_id, check_password_validity, get_response
 from constants.messages import UserMessages, CommonMessages
 from validation.web_validation.user.user_validation import \
-    register_field_validation
+    register_field_validation, login_field_validation
 
 user_controller = Blueprint('user_controller', __name__)
 
@@ -30,6 +30,22 @@ def register():
         field_validation, status_code = register_field_validation(request)
         if field_validation['status']:
             return register_service(field_validation['data'])
+        else:
+            return field_validation, status_code
+
+    except Exception as e:
+        print("Error in register API: " + str(e))
+        print(traceback.format_exc())
+        return get_response(False, CommonMessages.FAIL_SOMETHING_WENT_WRONG,
+                            {}), 500
+
+
+@user_controller.route('/login', methods=['POST'])
+def login():
+    try:
+        field_validation, status_code = login_field_validation(request)
+        if field_validation['status']:
+            return login_service(field_validation['data'])
         else:
             return field_validation, status_code
 

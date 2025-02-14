@@ -88,4 +88,14 @@ export class CommonJsFunctions {
             position: 'top-right',
         });
     }
+
+    showMessage(message, type) {
+        $.toast({
+            text: message,
+            icon: type,
+            loader: true,        // Change it to false to disable loader
+            loaderBg: '#9EC600',  // To change the background
+            position: 'top-right',
+        });
+    }
 }

@@ -4,6 +4,7 @@ from flask import Blueprint, render_template, request
 from textblob import TextBlob
 import requests
 
+from app_session.user_session import is_user_logged_in
 from conf_enviroment.conf_env import config
 from model.user.user import update_is_verified
 from model.user.user_email_verify_token import get_token_data_by_token, \
@@ -19,6 +20,7 @@ APP_NAME = config.APP_NAME
 
 # Root Page
 @page_controller.route('/')
+@is_user_logged_in("page")
 def index():
     category = request.args.get('category', 'general')
     url = f"https://newsapi.org/v2/top-headlines?category={category}&apiKey={config.NEWS_API_KEY}"

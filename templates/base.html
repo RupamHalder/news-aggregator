@@ -93,6 +93,18 @@
             </div>
         </header>
         {% endif %}
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <!--        <div class="alert alert-{{category}} alert-dismissible fade show text-center" role="alert">-->
+        <!--            {{ message }}-->
+        <!--            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>-->
+        <!--        </div>-->
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+
         {% block content %}
         <!-- Your main content goes here -->
         {% endblock content %}
@@ -227,11 +239,26 @@
         integrity="sha256-AlTido85uXPlSyyaZNsjJXeCs07eSv3r43kyCVc8ChI=" crossorigin="anonymous"></script>
 
 <!--Toaster-->
-<script src="{{ url_for('static', filename='assets/vendor/toaster/jquery.toast.min.js') }}" type="text/javascript"></script>
+<script src="{{ url_for('static', filename='assets/vendor/toaster/jquery.toast.min.js') }}"
+        type="text/javascript"></script>
 
 <!-- Global JS -->
 <script src="{{ url_for('static', filename='custom/js/globalFunctions.js') }}" type="module"></script>
 <script src="{{ url_for('static', filename='custom/js/global.js') }}" type="module"></script>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+{% for category, message in messages %}
+<script type="module">
+    import { CommonJsFunctions } from "{{ url_for('static', filename='custom/js/globalFunctions.js') }}";
+
+    $(document).ready(function () {
+        globalFunctions.showMessage(message, category);
+    });
+</script>
+{% endfor %}
+{% endif %}
+{% endwith %}
 
 <!-- Page JS -->
 {% block page_js %}

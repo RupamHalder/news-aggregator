@@ -14,7 +14,11 @@ class UserMessages:
     INVALID_PASS_LENGTH = '''Password must be at least 8 characters long.'''
     
     EXISTS_EMAIL = '''Email already exists.'''
-    
+
+    NOT_EXISTS_EMAIL = '''This email doesn't match our records.'''
+
+    PLEASE_LOGIN = '''Please login first.'''
+
     SUCCESS_PASS_VALID = '''Password is valid.'''
     SUCCESS_USER_REGISTRATION = '''User registered successfully. Verification email sent.'''
 
