@@ -1,11 +1,12 @@
 import traceback
 
-from flask import Blueprint, render_template, request
+from flask import Blueprint, flash, redirect, render_template, request, url_for
 from textblob import TextBlob
 import requests
 
-from app_session.user_session import is_user_logged_in
+from app_session.user_session import destroy_user_session, is_user_logged_in
 from conf_enviroment.conf_env import config
+from constants.messages import UserMessages
 from model.user.user import update_is_verified
 from model.user.user_email_verify_token import get_token_data_by_token, \
     update_token_data_object
@@ -115,3 +116,11 @@ def verify_email(token):
                                message=message,
                                message_type=message_type,
                                page_info=get_page_info('index'))
+    
+
+# Registration page for new users
+@page_controller.route('/logout')
+def logout_page():
+    destroy_user_session()
+    flash(UserMessages.SUCCESS_USER_LOGOUT, 'success')
+    return redirect(url_for('page_controller.login_page'))

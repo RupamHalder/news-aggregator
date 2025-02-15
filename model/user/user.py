@@ -6,6 +6,7 @@ from sqlalchemy.orm import relationship
 
 from database.db_conn import Base, engine
 from database.db_session import session
+from model.user.user_detail import UserDetails
 from utils.utility import generate_auto_id, datetime_to_string, \
     encryption_sha_256
 
@@ -83,6 +84,38 @@ def update_is_verified(user_ag_id, is_verified):
         session.close()
 
 
+def get_user_by_username_password(username, password):
+    try:
+        password = encryption_sha_256(password)
+        user = session.query(
+                UserDetails.user_ag_id,
+                User.username,
+                User.password,
+                UserDetails.first_name,
+                UserDetails.last_name,
+                UserDetails.phone_no,
+                UserDetails.profile_pic,
+            ).outerjoin(
+                UserDetails, User.user_ag_id == UserDetails.user_ag_id
+            ).filter(
+                User.username==username, User.password==password
+            ).first()
+        return {
+            'user_id': user.user_ag_id,
+            'email': user.username,
+            'first_name': user.first_name,
+            'last_name': user.last_name,
+            'phone_no': user.phone_no,
+            'profile_pic': user.profile_pic
+        } if user is not None else None
+    except Exception as e:
+        print("Error in get_user_by_username_password model function: ", e)
+        traceback.print_exc()
+        return None
+    finally:
+        session.close()
+
+
 def is_username_exist(username):
     try:
         user_count = session.query(User).filter_by(username=username).count()
@@ -90,6 +123,19 @@ def is_username_exist(username):
     except:
         print("Error in is_username_exist model function:")
         print(traceback.format_exc())
+        return False
+    finally:
+        session.close()
+
+
+def is_user_exist_by_username_password(username, password):
+    try:
+        user_count = session.query(User).filter_by(
+            username=username, password=password).count()
+        return user_count > 0
+    except Exception as e:
+        print("Error in is_user_exist_by_email_password model function: ", e)
+        traceback.print_exc()
         return False
     finally:
         session.close()

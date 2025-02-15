@@ -8,7 +8,7 @@ from model.user.user import add_user, is_username_exist, is_email_verified
 from model.user.user_email_verify_token import add_email_verify_token, \
     update_token_data_object, get_token_data_by_email
 from service.others.mail import send_email
-from service.web_service.user.user_service import register_service
+from service.web_service.user.user_service import login_service, register_service
 from utils.utility import is_email_valid, get_current_time_milli_sec, \
     generate_token, generate_auto_id, check_password_validity, get_response
 from constants.messages import UserMessages, CommonMessages

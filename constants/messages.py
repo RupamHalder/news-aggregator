@@ -19,8 +19,13 @@ class UserMessages:
 
     PLEASE_LOGIN = '''Please login first.'''
 
+    UNMATCHED_CONF_PASS = '''Password and confirm password must match'''
+
     SUCCESS_PASS_VALID = '''Password is valid.'''
     SUCCESS_USER_REGISTRATION = '''User registered successfully. Verification email sent.'''
+    SUCCESS_USER_LOGIN = '''You are successfully logged in.'''
+    SUCCESS_USER_LOGOUT = '''You are successfully logged out.'''
 
     FAIL_USER_REGISTRATION = '''User registration failed.'''
+    FAIL_USER_LOGIN = '''Incorrect email or password.'''
     FAIL_VERIFY_MAIL_SEND = '''Unable to send verification email.'''

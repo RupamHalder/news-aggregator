@@ -8,6 +8,7 @@ def register_field_validation(request):
     data = request.get_json()
     email = data.get('email', '').strip()
     password = data.get('password', '').strip()
+    conf_password = data.get('conf_password', '').strip()
 
     if is_param_empty(email) or is_param_empty(password):
         return get_response(False, UserMessages.REQUIRE_EMAIL_PASS, {}), 400
@@ -21,10 +22,14 @@ def register_field_validation(request):
     is_password_valid, message = check_password_validity(password)
     if not is_password_valid:
         return get_response(False, message, {}), 400
+    
+    if conf_password != password:
+        return get_response(False, UserMessages.UNMATCHED_CONF_PASS, {}), 400
 
     return get_response(True, CommonMessages.SUCCESS, {
         "email": email,
-        "password": password
+        "password": password,
+        "conf_password": conf_password
     }), 200
 
 

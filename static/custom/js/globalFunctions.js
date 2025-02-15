@@ -4,63 +4,6 @@ export class LoginJsFunctions {
 
 export class RegisterJsFunctions {
     constructor() {}
-
-    registerUser(registerButton) {
-        $(registerButton).prop('disabled', true);
-        $(registerButton).html('Registering...');
-
-        $.ajax({
-            type: 'POST',
-            url: '/api/v1/user/register',
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrfToken"]').attr('content')
-            },
-            contentType: 'application/json',
-            data: JSON.stringify({
-                email: $('#email').val(),
-                password: $('#password').val(),
-                conf_password: $('#conf_password').val()
-            }),
-            success: function(response) {
-                $(registerButton).prop('disabled', false);
-                $(registerButton).html('Register');
-                if (response.status) {
-                    $.toast({
-                        heading: 'Success',
-                        text: response.message,
-                        icon: 'success',
-                        loader: true,        // Change it to false to disable loader
-                        loaderBg: '#9EC600',  // Change it to false to disable loader
-                        position: 'top-right',
-                        afterHidden: function () {
-                            window.location.href = '/login';
-                        }
-                    });
-                } else {
-                    $.toast({
-                        heading: 'Error',
-                        text: response.message,
-                        icon: 'error',
-                        loader: true,        // Change it to false to disable loader
-                        loaderBg: '#9EC600',  // Change it to false to disable loader
-                        position: 'top-right'
-                    });
-                }
-            },
-            error: function(xhr, status, error) {
-                $(registerButton).prop('disabled', false);
-                $(registerButton).html('Register');
-                $.toast({
-                    heading: 'Error',
-                    text: xhr.responseJSON.message,
-                    icon: 'error',
-                    loader: true,        // Change it to false to disable loader
-                    loaderBg: '#9EC600',  // Change it to false to disable loader
-                    position: 'top-right'
-                });
-            }
-        });
-    }
 }
 
 // common functions
@@ -90,12 +33,74 @@ export class CommonJsFunctions {
     }
 
     showMessage(message, type) {
+        // type -> "success","error","info","warning"
         $.toast({
+            heading: this.capitalizeFirstLetter(type),
             text: message,
             icon: type,
             loader: true,        // Change it to false to disable loader
             loaderBg: '#9EC600',  // To change the background
             position: 'top-right',
+        });
+    }
+
+    capitalizeFirstLetter(string) {
+        return string ? string.charAt(0).toUpperCase() + string.slice(1): '';
+    }
+
+    performPostAPICall(apiURL, method, data, dataType, processingButton, postProcessing, showSuccessMessage) {
+        let originalButtonHtml = $(processingButton).html();
+        $(processingButton).prop('disabled', true);
+        $(processingButton).html('Processing...');
+
+        $.ajax({
+            type: method,
+            url: apiURL,
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrfToken"]').attr('content')
+            },
+            contentType: dataType == 'json'? 'application/json': false,
+            data: data,
+            success: function(response) {
+                $(processingButton).prop('disabled', false);
+                $(processingButton).html(originalButtonHtml);
+                if (response.status) {
+                    if (showSuccessMessage) {
+                        $.toast({
+                            heading: 'Success',
+                            text: response.message,
+                            icon: 'success',
+                            loader: true,        // Change it to false to disable loader
+                            loaderBg: '#9EC600',  // Change it to false to disable loader
+                            position: 'top-right',
+                            afterHidden: postProcessing
+                        });
+                    } else {
+                        postProcessing();
+                    }
+                } else {
+                    $.toast({
+                        heading: 'Error',
+                        text: response.message,
+                        icon: 'error',
+                        loader: true,        // Change it to false to disable loader
+                        loaderBg: '#9EC600',  // Change it to false to disable loader
+                        position: 'top-right'
+                    });
+                }
+            },
+            error: function(xhr, status, error) {
+                $(processingButton).prop('disabled', false);
+                $(processingButton).html(originalButtonHtml);
+                $.toast({
+                    heading: 'Error',
+                    text: xhr.responseJSON.message,
+                    icon: 'error',
+                    loader: true,        // Change it to false to disable loader
+                    loaderBg: '#9EC600',  // Change it to false to disable loader
+                    position: 'top-right'
+                });
+            }
         });
     }
 }
