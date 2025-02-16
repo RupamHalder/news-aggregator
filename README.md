@@ -32,6 +32,7 @@ Before running the application, ensure you have the following installed:
    ```bash
    git clone https://github.com/yourusername/news-aggregator.git
    cd news-aggregator
+   git checkout master-v2.0
 
 2. **Set Up Virtual Environment**:
    ```bash
@@ -52,7 +53,11 @@ Before running the application, ensure you have the following installed:
             "DB_NAME": "your_database_name_here",
             "DB_USERNAME": "your_database_username_here",
             "DB_PASSWORD": "your_database_password_here",
-            "DB_HOST": "your_database_host_here"
+            "DB_HOST": "your_database_host_here",
+            "APP_NAME": "your_application_name_here",
+            "APP_BASE_URL": "your_application_base_url_here",
+            "SMTP_USERNAME": "your_smtp_mail_server_username",
+            "SMTP_PASSWORD": "your_smtp_mail_server_password"
         }
    
 5. **Run the Application**:
