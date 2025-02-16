@@ -7,6 +7,7 @@ from sqlalchemy.orm import relationship
 from database.db_conn import Base, engine
 from database.db_session import session
 from model.user.user_detail import UserDetails
+from model.user.user_email_verify_token import UserEmailVerifyToken
 from utils.utility import generate_auto_id, datetime_to_string, \
     encryption_sha_256
 
@@ -88,28 +89,88 @@ def get_user_by_username_password(username, password):
     try:
         password = encryption_sha_256(password)
         user = session.query(
-                UserDetails.user_ag_id,
+                User.user_ag_id,
                 User.username,
                 User.password,
+                User.is_verified,
                 UserDetails.first_name,
                 UserDetails.last_name,
                 UserDetails.phone_no,
                 UserDetails.profile_pic,
+                UserEmailVerifyToken.token,
+                UserEmailVerifyToken.token_exp_timestamp,
+                UserEmailVerifyToken.token_request_count,
+                UserEmailVerifyToken.next_token_request_timestamp,
             ).outerjoin(
                 UserDetails, User.user_ag_id == UserDetails.user_ag_id
+            ).outerjoin(
+                UserEmailVerifyToken, User.user_ag_id == UserEmailVerifyToken.user_ag_id
             ).filter(
                 User.username==username, User.password==password
             ).first()
         return {
-            'user_id': user.user_ag_id,
-            'email': user.username,
-            'first_name': user.first_name,
-            'last_name': user.last_name,
-            'phone_no': user.phone_no,
-            'profile_pic': user.profile_pic
+            'user_data': {
+                'user_id': user.user_ag_id,
+                'email': user.username,
+                'first_name': user.first_name,
+                'last_name': user.last_name,
+                'phone_no': user.phone_no,
+                'profile_pic': user.profile_pic,
+            },
+            'email_verification_data': {
+                'token': user.token,
+                'token_exp_timestamp': user.token_exp_timestamp,
+                'token_request_count': user.token_request_count,
+                'next_token_request_timestamp': user.next_token_request_timestamp
+            },
+            'is_verified': user.is_verified,
         } if user is not None else None
     except Exception as e:
         print("Error in get_user_by_username_password model function: ", e)
+        traceback.print_exc()
+        return None
+    finally:
+        session.close()
+
+
+def get_token_data_by_email(email):
+    try:
+        result = (
+            session.query(UserEmailVerifyToken)
+            .join(UserEmailVerifyToken, User.user_ag_id == UserEmailVerifyToken.user_ag_id)
+            .filter(User.username == email)
+            .first()
+        )
+
+        return result
+    except Exception as e:
+        print("Error in get_token_data_by_email model function: ", e)
+        traceback.print_exc()
+        return None
+    finally:
+        session.close()
+
+
+def get_token_data_by_token(token):
+    try:
+        token_data = (
+            session
+            .query(
+                User.is_verified.label('is_email_verified'),
+                UserEmailVerifyToken.user_ag_id,
+                UserEmailVerifyToken.token,
+                UserEmailVerifyToken.token_exp_timestamp,
+                UserEmailVerifyToken.token_request_count,
+                UserEmailVerifyToken.next_token_request_timestamp
+            )
+            .join(UserEmailVerifyToken,
+                  User.user_ag_id == UserEmailVerifyToken.user_ag_id)
+            .filter(UserEmailVerifyToken.token==token)
+            .first()
+        )
+        return token_data
+    except Exception as e:
+        print("Error in get_token_data_by_token model function: ", e)
         traceback.print_exc()
         return None
     finally:

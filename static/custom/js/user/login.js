@@ -17,10 +17,12 @@ $(document).ready(function() {
         });
         let dataType = 'json';
         let processingButton = this;
-        let postProcessing = () => {
-            window.location.href = '/';
+        let postProcessing = (responseData) => {
+            if (responseData.home_page_redirection) {
+                window.location.href = '/';
+            }
         }
-        let showSuccessMessage = false;
+        let showSuccessMessage = true;
         globalFunctions.performPostAPICall(apiURL, method, data, dataType, processingButton, postProcessing, showSuccessMessage);
     });
 });

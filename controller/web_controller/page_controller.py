@@ -7,21 +7,21 @@ import requests
 from app_session.user_session import destroy_user_session, is_user_logged_in
 from conf_enviroment.conf_env import config
 from constants.messages import UserMessages
-from model.user.user import update_is_verified
-from model.user.user_email_verify_token import get_token_data_by_token, \
-    update_token_data_object
+from constants.constants import Constants
+from model.user.user import update_is_verified, get_token_data_by_token
+from model.user.user_email_verify_token import update_token_data_object
 from utils.page_info import get_page_info
 from utils.utility import get_current_time_milli_sec
 
 page_controller = Blueprint('page_controller', __name__)
 
-TOKEN_EXP_TIME_GAP = 15 * 60
+TOKEN_EXP_TIME_GAP = Constants.TOKEN_EXP_TIME_GAP
 APP_NAME = config.APP_NAME
 
 
 # Root Page
 @page_controller.route('/')
-@is_user_logged_in("page")
+# @is_user_logged_in("page")
 def index():
     category = request.args.get('category', 'general')
     url = f"https://newsapi.org/v2/top-headlines?category={category}&apiKey={config.NEWS_API_KEY}"
@@ -61,8 +61,16 @@ def verify_email(token):
     try:
         token_data = get_token_data_by_token(token)
 
+        if token_data.is_email_verified:
+            message = UserMessages.ALREADY_MAIL_VERIFIED
+            message_type = 'success'
+            return render_template('user/message/email-verify.html',
+                                   message=message,
+                                   message_type=message_type,
+                                   page_info=get_page_info('index'))
+
         if not token_data:
-            message = 'Invalid token.'
+            message = UserMessages.INVALID_EMAIL_VERIFY_TOKEN
             message_type = 'error'
             return render_template('user/message/email-verify.html',
                                    message=message,
@@ -70,7 +78,7 @@ def verify_email(token):
                                    page_info=get_page_info('index'))
 
         if get_current_time_milli_sec() > int(token_data.token_exp_timestamp):
-            message = 'The verification link has expired.'
+            message = UserMessages.EXPIRED_EMAIL_VERIFY_TOKEN
             message_type = 'error'
             return render_template('user/message/email-verify.html',
                                    message=message,
@@ -84,7 +92,7 @@ def verify_email(token):
 
         is_token_updated = update_token_data_object(token_data)
         if not is_token_updated:
-            message = 'Unable to verify email.'
+            message = UserMessages.FAIL_VERIFY_MAIL
             message_type = 'error'
             return render_template('user/message/email-verify.html',
                                    message=message,
@@ -94,14 +102,14 @@ def verify_email(token):
         is_verified_updated = update_is_verified(token_data.user_ag_id, True)
 
         if not is_verified_updated:
-            message = 'Unable to verify email.'
+            message = UserMessages.FAIL_VERIFY_MAIL
             message_type = 'error'
             return render_template('user/message/email-verify.html',
                                    message=message,
                                    message_type=message_type,
                                    page_info=get_page_info('index'))
         else:
-            message = 'Email verified successfully.'
+            message = UserMessages.SUCCESS_VERIFY_MAIL
             message_type = 'success'
             return render_template('user/message/email-verify.html',
                                    message=message,
@@ -110,7 +118,7 @@ def verify_email(token):
 
     except Exception as e:
         print(traceback.format_exc())
-        message = 'Unable to verify email.'
+        message = UserMessages.FAIL_VERIFY_MAIL
         message_type = 'error'
         return render_template('user/message/email-verify.html',
                                message=message,

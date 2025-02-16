@@ -1,11 +1,9 @@
 import traceback
 
 from sqlalchemy import Column, Integer, Text, String, ForeignKey
-from sqlalchemy.orm import joinedload
 
 from database.db_conn import Base, engine
 from database.db_session import session
-from model.user.user import User
 
 
 class UserEmailVerifyToken(Base):
@@ -61,6 +59,30 @@ def add_email_verify_token(user_ag_id, token,
         session.close()
 
 
+def update_token_data_by_user_ag_id(user_ag_id, token, token_exp_timestamp,
+                                    token_request_count, next_token_request_timestamp):
+    try:
+        token_data = session.query(UserEmailVerifyToken).filter(
+            UserEmailVerifyToken.user_ag_id == user_ag_id).first()
+        if token_data is not None:
+            token_data.token = token
+            token_data.token_exp_timestamp = token_exp_timestamp
+            token_data.token_request_count = token_request_count
+            token_data.next_token_request_timestamp = next_token_request_timestamp
+            session.commit()
+            return True
+        else:
+            return False
+    except Exception as e:
+        session.rollback()
+        print("Error in update_token_data_by_user_ag_id model function: ", e)
+        traceback.print_exc()
+        return False
+    finally:
+        session.close()
+
+
+
 def update_token_data_object(token_data):
     try:
         session.merge(token_data)
@@ -86,25 +108,6 @@ def get_token_data_by_token(token):
         return None
     finally:
         session.close()
-
-
-def get_token_data_by_email(email):
-    try:
-        result = (
-            session.query(UserEmailVerifyToken)
-            .join(User, User.user_ag_id == UserEmailVerifyToken.user_ag_id)
-            .filter(User.username == email)
-            .options(joinedload(UserEmailVerifyToken.user))
-            .first()
-        )
-
-        return result
-    except Exception as e:
-        print("Error in get_token_data_by_email model function: ", e)
-        traceback.print_exc()
-        return None
-    finally:
-        session.close()
-
+        
 
 Base.metadata.create_all(engine)

@@ -9,7 +9,7 @@ from utils.utility import get_response
 def create_user_session(user_data):
     try:
         session['user_data'] = user_data
-        session['is_active'] = True
+        session['is_logged_in'] = True
         return True
     except:
         print("Error in create_user_session function:")
@@ -20,7 +20,7 @@ def create_user_session(user_data):
 def destroy_user_session():
     try:
         session['user_data'] = None
-        session['is_active'] = False
+        session['is_logged_in'] = False
         return True
     except:
         print("Error in destroy_user_session function:")
@@ -33,8 +33,8 @@ def destroy_user_session():
 def is_user_logged_in(resource_type):
     def decorator_wrapper(f):
         def wrapper(*args, **kwargs):
-            print(session.get('is_active'))
-            if session.get('is_active') is True:
+            print(session.get('is_logged_in'))
+            if session.get('is_logged_in') is True:
                 return f(*args, **kwargs)
             else:
                 if resource_type == "page":

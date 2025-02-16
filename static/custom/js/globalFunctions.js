@@ -73,10 +73,10 @@ export class CommonJsFunctions {
                             loader: true,        // Change it to false to disable loader
                             loaderBg: '#9EC600',  // Change it to false to disable loader
                             position: 'top-right',
-                            afterHidden: postProcessing
+                            afterHidden: postProcessing(response.data)
                         });
                     } else {
-                        postProcessing();
+                        postProcessing(response.data);
                     }
                 } else {
                     $.toast({

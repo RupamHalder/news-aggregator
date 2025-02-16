@@ -21,6 +21,8 @@ class AllConf:
                 'DB_HOST') or ''
             APP_NAME = app_credentials.get(
                 'APP_NAME') or ''
+            APP_BASE_URL = app_credentials.get(
+                'APP_BASE_URL') or ''
             SMTP_USERNAME = app_credentials.get(
                 'SMTP_USERNAME') or ''
             SMTP_PASSWORD = app_credentials.get(

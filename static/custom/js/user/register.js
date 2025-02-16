@@ -18,7 +18,7 @@ $(document).ready(function () {
         });
         let dataType = 'json';
         let processingButton = this;
-        let postProcessing = () => {
+        let postProcessing = (responseData) => {
             window.location.href = '/login';
         }
         let showSuccessMessage = true;

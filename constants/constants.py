@@ -250,3 +250,6 @@ class Constants:
         'zw': 'Zimbabwe',
         'ax': 'Åland Islands'
     }
+    TOKEN_EXP_TIME_GAP = 15 * 60
+    TOKEN_ATTEMPT_TIME_GAP = 5 * 60
+    MAXIMUM_TOKEN_REQUEST_COUNT = 3
