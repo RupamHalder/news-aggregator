@@ -1,7 +1,8 @@
 from datetime import datetime
 import traceback
 
-from sqlalchemy import Column, Integer, DateTime, Boolean, String, ForeignKey
+from sqlalchemy import Column, Integer, DateTime, Boolean, String, ForeignKey, \
+    Text
 
 from database.db_conn import Base, engine
 from database.db_session import session
@@ -11,11 +12,13 @@ from utils.utility import generate_auto_id, datetime_to_string
 class SavedArticle(Base):
     __tablename__ = 'article_saved'
     id = Column(Integer, primary_key=True)
-    user_id = Column(String(150), ForeignKey('user.user_ag_id'), nullable=False)
+    user_id = Column(String(150), ForeignKey('user.user_ag_id'),
+                     nullable=False)
     saved_article_ag_id = Column(String(150), unique=True, nullable=False)
     title = Column(String(300), nullable=False)
+    description = Column(Text, nullable=True)
+    article_image_url = Column(Text, nullable=True)
     url = Column(String(300), nullable=False)
-    category = Column(String(50), nullable=False)
     sentiment = Column(String(50), nullable=True)
 
     status = Column(Boolean, default=True)
@@ -25,12 +28,14 @@ class SavedArticle(Base):
     updated_at = Column(DateTime, default=datetime.now())
 
     def __init__(self, user_id=None, saved_article_ag_id=None, title=None,
-                 url=None, category=None, sentiment=None):
+                 description=None, article_image_url=None, url=None,
+                 sentiment=None):
         self.user_id = user_id
         self.saved_article_ag_id = saved_article_ag_id
         self.title = title
+        self.description = description
+        self.article_image_url = article_image_url
         self.url = url
-        self.category = category
         self.sentiment = sentiment
 
     @property
@@ -40,8 +45,9 @@ class SavedArticle(Base):
             'user_id': self.user_id,
             'saved_article_ag_id': self.saved_article_ag_id,
             'title': self.title,
+            'description': self.description,
+            'article_image_url': self.article_image_url,
             'url': self.url,
-            'category': self.category,
             'sentiment': self.sentiment,
             'status': self.status,
             'is_deleted': self.is_deleted,
@@ -50,8 +56,8 @@ class SavedArticle(Base):
         }
 
 
-def add_saved_article(user_id=None, title=None,
-                      url=None, category=None, sentiment=None):
+def add_saved_article(user_id, title, description,
+                      article_image_url, url, sentiment):
     try:
         if not user_id or not title or not url or not category:
             return False
@@ -59,7 +65,8 @@ def add_saved_article(user_id=None, title=None,
             prefix="article_saved", length=32)
         saved_article = SavedArticle(
             user_id=user_id, saved_article_ag_id=saved_article_ag_id,
-            title=title, url=url, category=category, sentiment=sentiment)
+            title=title, description=description, article_image_url=article_image_url,
+            url=url, sentiment=sentiment)
         session.add(saved_article)
         session.commit()
         return True

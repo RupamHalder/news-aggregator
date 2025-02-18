@@ -18,51 +18,107 @@
     <!-- End Page Title -->
 
     <!-- Blog Posts 2 Section -->
-    <section id="blog-posts-2" class="blog-posts-2 section">
+    <!--    <section id="blog-posts-2" class="blog-posts-2 section">-->
 
-        <div class="container">
+    <!--        <div class="container">-->
 
-            <div class="row gy-5">
-                {% if articles | length == 0 %}
-                <div class="col-lg-12">
-                    <div class="text-center">
-                        <h2>No articles found</h2>
-                    </div>
-                </div>
-                {% endif %}
-                {% for article in articles %}
-                <div class="col-lg-4 col-md-6">
-                    <article>
+    <!--            <div class="row gy-5">-->
+    <!--                {% if articles | length == 0 %}-->
+    <!--                <div class="col-lg-12">-->
+    <!--                    <div class="text-center">-->
+    <!--                        <h2>No articles found</h2>-->
+    <!--                    </div>-->
+    <!--                </div>-->
+    <!--                {% endif %}-->
+    <!--                {% for article in articles %}-->
+    <!--                <div class="col-lg-4 col-md-6">-->
+    <!--                    <article>-->
 
-                        <div class="post-img">
-                            <img src="{% if article.urlToImage %}{{ article.urlToImage }}{% else %}{{ url_for('static', filename='assets/img/no-image.jpg') }}{% endif %}"
-                                 alt="" class="img-fluid">
-                        </div>
+    <!--                        <div class="post-img">-->
+    <!--                            <img src="{% if article.urlToImage %}{{ article.urlToImage }}{% else %}{{ url_for('static', filename='assets/img/no-image.jpg') }}{% endif %}"-->
+    <!--                                 alt="" class="img-fluid">-->
+    <!--                        </div>-->
 
-                        <div class="meta-top">
-                            <ul>
-                                <li class="d-flex align-items-center">
-                                    <time datetime="2022-01-01">{{ article.publishedAt.split('T')[0] }}</time>
-                                </li>
-                                <li class="d-flex align-items-center">
-                                    <i class="bi bi-dot"></i> <strong>Sentiment:</strong> {{ article.sentiment }}
-                                </li>
-                            </ul>
-                        </div>
+    <!--                        <div class="meta-top">-->
+    <!--                            <ul>-->
+    <!--                                <li class="d-flex align-items-center">-->
+    <!--                                    <time datetime="2022-01-01">{{ article.publishedAt.split('T')[0] }}</time>-->
+    <!--                                </li>-->
+    <!--                                <li class="d-flex align-items-center">-->
+    <!--                                    <i class="bi bi-dot"></i> <strong>Sentiment:</strong> {{ article.sentiment }}-->
+    <!--                                </li>-->
+    <!--                            </ul>-->
+    <!--                        </div>-->
 
-                        <h2 class="title">
-                            <a href="blog-details.html">{{ article.title }}</a>
-                        </h2>
+    <!--                        <h2 class="title">-->
+    <!--                            <a href="blog-details.html">{{ article.title }}</a>-->
+    <!--                        </h2>-->
 
-                    </article>
-                </div>
-                {% endfor %}
+    <!--                    </article>-->
+    <!--                </div>-->
+    <!--                {% endfor %}-->
 
-            </div><!-- End blog posts list -->
+    <!--            </div>&lt;!&ndash; End blog posts list &ndash;&gt;-->
 
+    <!--        </div>-->
+
+    <!--    </section>&lt;!&ndash; /Blog Posts 2 Section &ndash;&gt;-->
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mt-3">
+        {% if articles | length == 0 %}
+        <div class="col-lg-12">
+            <div class="text-center">
+                <h2>No articles found</h2>
+            </div>
         </div>
+        {% endif %}
+        {% for article in articles %}
+        <div class="col my-3">
+            <div class="card h-100">
+                {% if article.urlToImage %}
+                <img src="{{ article.urlToImage }}" class="card-img-top" alt="{{ article.title }}">
+                {% else %}
+                <img src="{{ url_for('static', filename='assets/img/no-image.jpg') }}" class="card-img-top"
+                     alt="No Image Found">
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ article.title }}</h5>
+                    <p class="card-text">{{ article.description }}</p>
 
-    </section><!-- /Blog Posts 2 Section -->
+                    <div class="sentiment-indicator mb-3">
+                        {% if article.sentiment > 0.1 %}
+                        <span class="badge bg-success">Positive</span>
+                        {% elif article.sentiment < -0.1 %}
+                        <span class="badge bg-danger">Negative</span>
+                        {% else %}
+                        <span class="badge bg-secondary">Neutral</span>
+                        {% endif %}
+                    </div>
+
+                    <a href="{{ article.url }}" class="btn btn-secondary btn-sm" target="_blank">Read More</a>
+
+                    {% if session['is_logged_in'] %}
+                    <div class="d-inline">
+                        <button type="submit" class="btn btn-primary btn-sm"
+                                data-title = "{{ article.title }}"
+                                data-url = "{{ article.url }}"
+                                data-description = "{{ article.description }}"
+                                data-article_image_url = "{{ article.urlToImage }}"
+                                data-sentiment = "{{ article.sentiment }}"
+                        >
+                            Save Article
+                        </button>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="card-footer">
+                    <small class="text-muted">{{ article.publishedAt.split('T')[0] }}</small>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
 
     <!-- Blog Pagination Section -->
     <!--    <section id="blog-pagination" class="blog-pagination section">-->

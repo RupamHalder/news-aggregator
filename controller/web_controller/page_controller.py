@@ -31,9 +31,7 @@ def index():
     # Add sentiment analysis to each article
     for article in articles:
         analysis = TextBlob(article['description'] or '')
-        article[
-            'sentiment'] = 'Positive' if analysis.sentiment.polarity > 0 else \
-            'Negative' if analysis.sentiment.polarity < 0 else 'Neutral'
+        article['sentiment'] = analysis.sentiment.polarity
 
     return render_template('index.html',
                            articles=articles,

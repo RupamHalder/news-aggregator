@@ -17,6 +17,15 @@ def create_user_session(user_data):
         return False
 
 
+def get_logged_in_user_id():
+    try:
+        return session.get('user_data').get('user_id')
+    except:
+        print("Error in get_logged_in_user_id function:")
+        print(traceback.format_exc())
+        return None
+
+
 def destroy_user_session():
     try:
         session['user_data'] = None

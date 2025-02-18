@@ -22,7 +22,7 @@ instance/
 *.db
 
 # Alembic migrations
-migrations/
+# migrations/
 
 # SQLAlchemy debug file
 sqlalchemy_debug.log
