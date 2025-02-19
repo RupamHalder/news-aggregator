@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block content %}
+
+<main class="main">
+
+    <!-- Page Title -->
+    <div class="page-title light-background">
+        <div class="container">
+            <h1>{{ page_info.get('page_heading') }}</h1>
+            <!--            <nav class="breadcrumbs">-->
+            <!--                <ol>-->
+            <!--                    <li><a href="index.html">Home</a></li>-->
+            <!--                    <li class="current">Blog</li>-->
+            <!--                </ol>-->
+            <!--            </nav>-->
+        </div>
+    </div>
+    <!-- End Page Title -->
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mt-3">
+        {% if articles | length == 0 %}
+        <div class="col-lg-12">
+            <div class="text-center">
+                <h2>No articles saved yet</h2>
+            </div>
+        </div>
+        {% endif %}
+        {% for article in articles %}
+        <div class="col my-3">
+            <div class="card h-100">
+                {% if article.article_image_url %}
+                <img src="{{ article.article_image_url }}" class="card-img-top" alt="{{ article.title }}">
+                {% else %}
+                <img src="{{ url_for('static', filename='assets/img/no-image.jpg') }}" class="card-img-top"
+                     alt="No Image Found">
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ article.title }}</h5>
+                    <p class="card-text">{{ article.description }}</p>
+
+                    <div class="sentiment-indicator mb-3">
+                        {% if article.sentiment > 0.1 %}
+                        <span class="badge bg-success">Positive</span>
+                        {% elif article.sentiment < -0.1 %}
+                        <span class="badge bg-danger">Negative</span>
+                        {% else %}
+                        <span class="badge bg-secondary">Neutral</span>
+                        {% endif %}
+                    </div>
+
+                    <a href="{{ article.url }}" class="btn btn-secondary btn-sm" target="_blank">Read More</a>
+
+                    <div class="d-inline">
+                        <button type="submit" class="btn btn-danger btn-sm"
+                                id="btnDeleteArticle"
+                                data-saved_article_id = "{{ article.saved_article_ag_id }}"
+                        >
+                            Delete Article
+                        </button>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <small class="text-muted">{{ article.published_at.split('T')[0] }}</small>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+</main>
+
+{% endblock content %}
+
+{% block page_js %}
+<script src="{{ url_for('static', filename='custom/js/article/article_delete.js') }}" type="module"></script>
+{% endblock page_js %}

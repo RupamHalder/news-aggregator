@@ -100,11 +100,13 @@
                     {% if session['is_logged_in'] %}
                     <div class="d-inline">
                         <button type="submit" class="btn btn-primary btn-sm"
+                                id="btnSaveArticle"
                                 data-title = "{{ article.title }}"
                                 data-url = "{{ article.url }}"
                                 data-description = "{{ article.description }}"
                                 data-article_image_url = "{{ article.urlToImage }}"
                                 data-sentiment = "{{ article.sentiment }}"
+                                data-published_at = "{{ article.publishedAt }}"
                         >
                             Save Article
                         </button>
@@ -144,3 +146,7 @@
 </main>
 
 {% endblock content %}
+
+{% block page_js %}
+<script src="{{ url_for('static', filename='custom/js/article/article_add.js') }}" type="module"></script>
+{% endblock page_js %}

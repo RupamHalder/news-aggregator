@@ -39,6 +39,7 @@ def upgrade() -> None:
                                 ['user.user_ag_id'],
                                 name='user_email_verify_token_ibfk_1'),
         sa.PrimaryKeyConstraint('id'),
+        if_not_exists=True,
         mysql_collate='utf8mb4_unicode_ci',
         mysql_default_charset='utf8mb4',
         mysql_engine='InnoDB'
@@ -60,12 +61,14 @@ def upgrade() -> None:
                                 ['user.user_ag_id'],
                                 name='user_details_ibfk_1'),
         sa.PrimaryKeyConstraint('id'),
+        if_not_exists=True,
         mysql_collate='utf8mb4_unicode_ci',
         mysql_default_charset='utf8mb4',
         mysql_engine='InnoDB'
     )
     op.create_index(
-        'user_ag_id', 'user_details', ['user_ag_id'], unique=True)
+        'user_ag_id', 'user_details', ['user_ag_id'], unique=True,
+        if_not_exists=True,)
     op.create_table(
         'user',
         sa.Column('id', mysql.INTEGER(display_width=11),
@@ -85,14 +88,17 @@ def upgrade() -> None:
         sa.Column('created_at', mysql.DATETIME(), nullable=True),
         sa.Column('updated_at', mysql.DATETIME(), nullable=True),
         sa.PrimaryKeyConstraint('id'),
+        if_not_exists=True,
         mysql_collate='utf8mb4_unicode_ci',
         mysql_default_charset='utf8mb4',
         mysql_engine='InnoDB'
     )
     op.create_index(
-        'username', 'user', ['username'], unique=True)
+        'username', 'user', ['username'], unique=True,
+        if_not_exists=True,)
     op.create_index(
-        'user_ag_id', 'user', ['user_ag_id'], unique=True)
+        'user_ag_id', 'user', ['user_ag_id'], unique=True,
+        if_not_exists=True,)
     # ### end Alembic commands ###
 
 

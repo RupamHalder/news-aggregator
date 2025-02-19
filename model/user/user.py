@@ -68,7 +68,9 @@ def add_user(user_ag_id=None, username=None, password=None):
 
 def update_is_verified(user_ag_id, is_verified):
     try:
-        user = session.query(User).filter_by(user_ag_id=user_ag_id).first()
+        user = session.query(User).filter_by(user_ag_id=user_ag_id,
+                                             is_deleted=0,
+                                             status=1).first()
         if user is not None:
             user.is_verified = is_verified
             user.updated_at = datetime.now()
@@ -89,25 +91,27 @@ def get_user_by_username_password(username, password):
     try:
         password = encryption_sha_256(password)
         user = session.query(
-                User.user_ag_id,
-                User.username,
-                User.password,
-                User.is_verified,
-                UserDetails.first_name,
-                UserDetails.last_name,
-                UserDetails.phone_no,
-                UserDetails.profile_pic,
-                UserEmailVerifyToken.token,
-                UserEmailVerifyToken.token_exp_timestamp,
-                UserEmailVerifyToken.token_request_count,
-                UserEmailVerifyToken.next_token_request_timestamp,
-            ).outerjoin(
-                UserDetails, User.user_ag_id == UserDetails.user_ag_id
-            ).outerjoin(
-                UserEmailVerifyToken, User.user_ag_id == UserEmailVerifyToken.user_ag_id
-            ).filter(
-                User.username==username, User.password==password
-            ).first()
+            User.user_ag_id,
+            User.username,
+            User.password,
+            User.is_verified,
+            UserDetails.first_name,
+            UserDetails.last_name,
+            UserDetails.phone_no,
+            UserDetails.profile_pic,
+            UserEmailVerifyToken.token,
+            UserEmailVerifyToken.token_exp_timestamp,
+            UserEmailVerifyToken.token_request_count,
+            UserEmailVerifyToken.next_token_request_timestamp,
+        ).outerjoin(
+            UserDetails, User.user_ag_id == UserDetails.user_ag_id
+        ).outerjoin(
+            UserEmailVerifyToken,
+            User.user_ag_id == UserEmailVerifyToken.user_ag_id
+        ).filter(
+            User.username == username, User.password == password,
+            User.is_deleted == 0, User.status == 1
+        ).first()
         return {
             'user_data': {
                 'user_id': user.user_ag_id,
@@ -138,7 +142,8 @@ def get_token_data_by_email(email):
         result = (
             session.query(UserEmailVerifyToken)
             .join(UserEmailVerifyToken, User.user_ag_id == UserEmailVerifyToken.user_ag_id)
-            .filter(User.username == email)
+            .filter(User.username == email,
+                    User.is_deleted == 0, User.status == 1)
             .first()
         )
 
@@ -165,7 +170,8 @@ def get_token_data_by_token(token):
             )
             .join(UserEmailVerifyToken,
                   User.user_ag_id == UserEmailVerifyToken.user_ag_id)
-            .filter(UserEmailVerifyToken.token==token)
+            .filter(UserEmailVerifyToken.token == token,
+                    User.is_deleted == 0, User.status == 1)
             .first()
         )
         return token_data
@@ -179,7 +185,9 @@ def get_token_data_by_token(token):
 
 def is_username_exist(username):
     try:
-        user_count = session.query(User).filter_by(username=username).count()
+        user_count = session.query(User).filter_by(username=username,
+                                                   is_deleted=0,
+                                                   status=1).count()
         return user_count > 0
     except:
         print("Error in is_username_exist model function:")
@@ -189,10 +197,26 @@ def is_username_exist(username):
         session.close()
 
 
+def is_user_id_exist(user_id):
+    try:
+        user_count = session.query(User).filter_by(user_ag_id=user_id,
+                                                   is_deleted=0,
+                                                   status=1).count()
+        return user_count > 0
+    except:
+        print("Error in is_user_id_exist model function:")
+        print(traceback.format_exc())
+        return False
+    finally:
+        session.close()
+
+
 def is_user_exist_by_username_password(username, password):
     try:
         user_count = session.query(User).filter_by(
-            username=username, password=password).count()
+            username=username, password=password,
+            is_deleted=0,
+            status=1).count()
         return user_count > 0
     except Exception as e:
         print("Error in is_user_exist_by_email_password model function: ", e)
@@ -209,7 +233,9 @@ def is_email_verified(email):
         ).filter_by(
             username=email
         ).filter_by(
-            is_verified=True
+            is_verified=True,
+            is_deleted=0,
+            status=1
         ).count()
         return user_count > 0
     except:

@@ -41,3 +41,27 @@ class UserMessages:
     FAIL_VERIFY_MAIL_RESEND = '''Unable to resend verification email.'''
     FAIL_VERIFY_MAIL_TOKEN_GEN = '''Cannot request a new token yet. Try later.'''
     FAIL_VERIFY_MAIL = '''Unable to verify email.'''
+
+
+class ArticleMessages:
+    MISSING_USER_ID = '''User id is missing.'''
+    MISSING_TITLE = '''Title is missing.'''
+    MISSING_URL = '''Url is missing.'''
+    MISSING_SENTIMENT = '''Sentiment is missing.'''
+    MISSING_ARTICLE_ID = '''Article id is missing.'''
+
+    ALREADY_SAVED_ARTICLE = '''This article is already saved.'''
+
+    INVALID_SENTIMENT = '''Invalid value for sentiment.'''
+    INVALID_USER_ID = '''Invalid user id found.'''
+    INVALID_ARTICLE_ID = '''Invalid article id found.'''
+
+    EXISTS_ARTICLE = '''This article is already saved.'''
+
+    DOES_NOT_BELONG_TO_USER = '''This article does not belong to the logged in user.'''
+
+    SUCCESS_SAVE_ARTICLE = '''Article saved successfully'''
+    SUCCESS_DELETE_ARTICLE = '''Article deleted successfully'''
+
+    FAIL_SAVE_ARTICLE = '''Failed to save the article'''
+    FAIL_DELETE_ARTICLE = '''Failed to delete the article'''

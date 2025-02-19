@@ -1,14 +1,18 @@
 export class LoginJsFunctions {
-    constructor() {}
+    constructor() { }
 }
 
 export class RegisterJsFunctions {
-    constructor() {}
+    constructor() { }
+}
+
+export class ArticleJsFunctions {
+    constructor() { }
 }
 
 // common functions
 export class CommonJsFunctions {
-    constructor() {}
+    constructor() { }
 
     togglePasswordVisibility(toggleElement) {
         if ($(toggleElement).find('i').attr("class") == "bi bi-eye") {
@@ -45,10 +49,11 @@ export class CommonJsFunctions {
     }
 
     capitalizeFirstLetter(string) {
-        return string ? string.charAt(0).toUpperCase() + string.slice(1): '';
+        return string ? string.charAt(0).toUpperCase() + string.slice(1) : '';
     }
 
-    performPostAPICall(apiURL, method, data, dataType, processingButton, postProcessing, showSuccessMessage) {
+    performPostAPICall(apiURL, method, data, dataType, processingButton,
+        postProcessing, showSuccessMessage) {
         let originalButtonHtml = $(processingButton).html();
         $(processingButton).prop('disabled', true);
         $(processingButton).html('Processing...');
@@ -59,9 +64,9 @@ export class CommonJsFunctions {
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrfToken"]').attr('content')
             },
-            contentType: dataType == 'json'? 'application/json': false,
+            contentType: dataType == 'json' ? 'application/json' : false,
             data: data,
-            success: function(response) {
+            success: function (response) {
                 $(processingButton).prop('disabled', false);
                 $(processingButton).html(originalButtonHtml);
                 if (response.status) {
@@ -89,7 +94,7 @@ export class CommonJsFunctions {
                     });
                 }
             },
-            error: function(xhr, status, error) {
+            error: function (xhr, status, error) {
                 $(processingButton).prop('disabled', false);
                 $(processingButton).html(originalButtonHtml);
                 $.toast({

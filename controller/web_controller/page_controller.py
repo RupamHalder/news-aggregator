@@ -4,10 +4,11 @@ from flask import Blueprint, flash, redirect, render_template, request, url_for
 from textblob import TextBlob
 import requests
 
-from app_session.user_session import destroy_user_session, is_user_logged_in
+from app_session.user_session import destroy_user_session, get_logged_in_user_id, is_user_logged_in
 from conf_enviroment.conf_env import config
 from constants.messages import UserMessages
 from constants.constants import Constants
+from model.article.article_saved import get_all_article_by_field
 from model.user.user import update_is_verified, get_token_data_by_token
 from model.user.user_email_verify_token import update_token_data_object
 from utils.page_info import get_page_info
@@ -19,7 +20,7 @@ TOKEN_EXP_TIME_GAP = Constants.TOKEN_EXP_TIME_GAP
 APP_NAME = config.APP_NAME
 
 
-# Root Page
+# Home Page
 @page_controller.route('/')
 # @is_user_logged_in("page")
 def index():
@@ -124,9 +125,22 @@ def verify_email(token):
                                page_info=get_page_info('index'))
     
 
-# Registration page for new users
+# Logout route
 @page_controller.route('/logout')
 def logout_page():
     destroy_user_session()
     flash(UserMessages.SUCCESS_USER_LOGOUT, 'success')
     return redirect(url_for('page_controller.login_page'))
+
+
+# =================== Before Login ===================
+# Page for saved articles
+@page_controller.route('/saved-articles')
+@is_user_logged_in("page")
+def saved_articles():
+    logged_in_user_id = get_logged_in_user_id()
+    articles = get_all_article_by_field('user_id', logged_in_user_id)
+
+    return render_template('article/article_saved.html',
+                           articles=articles,
+                           page_info=get_page_info('saved-articles'))

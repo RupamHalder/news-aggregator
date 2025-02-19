@@ -81,3 +81,10 @@ def is_param_empty(param):
         return True
     else:
         return False
+
+
+def convert_str_to_float(param):
+    try:
+        return float(param)
+    except:
+        return 0
