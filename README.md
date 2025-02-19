@@ -32,7 +32,7 @@ Before running the application, ensure you have the following installed:
    ```bash
    git clone https://github.com/yourusername/news-aggregator.git
    cd news-aggregator
-   git checkout master-v2.0
+   git checkout master-v3.0
 
 2. **Set Up Virtual Environment**:
    ```bash
