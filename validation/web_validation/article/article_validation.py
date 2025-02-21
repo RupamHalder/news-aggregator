@@ -2,7 +2,7 @@ from app_session.user_session import get_logged_in_user_id
 from constants.messages import ArticleMessages, CommonMessages
 from model.article.article_saved import is_article_table_field_exist
 from model.user.user import is_user_id_exist
-from utils.utility import get_response, is_param_empty
+from utils.utility import get_response, is_param_empty, is_str_float
 
 
 def save_article_field_validation(request):
@@ -27,7 +27,7 @@ def save_article_field_validation(request):
     if is_param_empty(sentiment):
         return get_response(False, ArticleMessages.MISSING_SENTIMENT, {}), 404
     
-    if not isinstance(sentiment, float):
+    if not is_str_float(sentiment):
         return get_response(False, ArticleMessages.INVALID_SENTIMENT, {}), 400
     
     if not is_user_id_exist(user_id):

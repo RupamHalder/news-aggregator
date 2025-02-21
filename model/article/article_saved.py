@@ -6,7 +6,8 @@ from sqlalchemy import Column, Integer, DateTime, Boolean, String, ForeignKey, \
 
 from database.db_conn import Base, engine
 from database.db_session import session
-from utils.utility import convert_str_to_float, generate_auto_id, datetime_to_string
+from utils.utility import convert_str_to_float, generate_auto_id, \
+    datetime_to_string
 
 
 class SavedArticle(Base):
@@ -18,7 +19,7 @@ class SavedArticle(Base):
     title = Column(String(300), nullable=False)
     description = Column(Text, nullable=True)
     article_image_url = Column(Text, nullable=True)
-    url = Column(String(300), unique=True, nullable=False)
+    url = Column(String(300), nullable=False)
     sentiment = Column(String(50), nullable=True)
     published_at = Column(String(150), nullable=True)
 
@@ -66,7 +67,8 @@ def add_saved_article(user_id, title, description,
             prefix="article_saved", length=32)
         saved_article = SavedArticle(
             user_id=user_id, saved_article_ag_id=saved_article_ag_id,
-            title=title, description=description, article_image_url=article_image_url,
+            title=title, description=description,
+            article_image_url=article_image_url,
             url=url, sentiment=sentiment, published_at=published_at)
         session.add(saved_article)
         session.commit()
@@ -79,10 +81,12 @@ def add_saved_article(user_id, title, description,
         session.close()
 
 
-def update_article_table_single_row_data(field_values, field_names, update_data):
+def update_article_table_single_row_data(field_values, field_names,
+                                         update_data):
     try:
         filter_condition = [
-            getattr(SavedArticle, field_name) == field_value for field_value, field_name in zip(field_values, field_names)]
+            getattr(SavedArticle, field_name) == field_value for
+            field_value, field_name in zip(field_values, field_names)]
         # Use dynamic filtering based on the provided field name
         article = session.query(SavedArticle).filter(
             and_(*filter_condition),
@@ -123,7 +127,8 @@ def get_all_article_by_field(field_name, field_value):
 def is_article_table_field_exist(field_values, field_names):
     try:
         filter_condition = [
-            getattr(SavedArticle, field_name) == field_value for field_value, field_name in zip(field_values, field_names)]
+            getattr(SavedArticle, field_name) == field_value for
+            field_value, field_name in zip(field_values, field_names)]
         # Use dynamic filtering based on the provided field name
         user_count = session.query(SavedArticle).filter(
             and_(*filter_condition),

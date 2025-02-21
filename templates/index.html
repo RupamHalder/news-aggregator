@@ -101,10 +101,10 @@
                     <div class="d-inline">
                         <button type="submit" class="btn btn-primary btn-sm"
                                 id="btnSaveArticle"
-                                data-title = "{{ article.title }}"
-                                data-url = "{{ article.url }}"
-                                data-description = "{{ article.description }}"
-                                data-article_image_url = "{{ article.urlToImage }}"
+                                data-title = "{% if article.title != None %}{{ article.title }}{% endif %}"
+                                data-url = "{% if article.url != None %}{{ article.url }}{% endif %}"
+                                data-description = "{% if article.description != None %}{{ article.description }}{% endif %}"
+                                data-article_image_url = "{% if article.urlToImage != None %}{{ article.urlToImage }}{% endif %}"
                                 data-sentiment = "{{ article.sentiment }}"
                                 data-published_at = "{{ article.publishedAt }}"
                         >

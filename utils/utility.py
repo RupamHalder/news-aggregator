@@ -88,3 +88,11 @@ def convert_str_to_float(param):
         return float(param)
     except:
         return 0
+
+
+def is_str_float(param):
+    try:
+        float(param)
+        return True
+    except:
+        return False

@@ -2,7 +2,8 @@ from flask import flash
 from conf_enviroment.conf_env import config
 from constants.messages import ArticleMessages
 from constants.constants import Constants
-from model.article.article_saved import add_saved_article, update_article_table_single_row_data
+from model.article.article_saved import add_saved_article, \
+    update_article_table_single_row_data
 from utils.utility import get_response
 
 BASE_URL = config.APP_BASE_URL
@@ -36,7 +37,8 @@ def delete_article_service(cleaned_data):
     saved_article_id = cleaned_data.get('saved_article_id')
 
     is_article_saved = update_article_table_single_row_data(
-        [saved_article_id], ['saved_article_ag_id'], {"is_deleted": True})
+        [saved_article_id], ['saved_article_ag_id'],
+        {"is_deleted": True, "status": False})
 
     if not is_article_saved:
         return get_response(False, ArticleMessages.FAIL_DELETE_ARTICLE,
