@@ -6,8 +6,6 @@ from sqlalchemy.orm import relationship
 
 from database.db_conn import Base, engine
 from database.db_session import session
-from model.user.user_detail import UserDetails
-from model.user.user_email_verify_token import UserEmailVerifyToken
 from utils.utility import generate_auto_id, datetime_to_string, \
     encryption_sha_256
 
@@ -43,6 +41,10 @@ class User(Base):
             'created_at': datetime_to_string(self.created_at),
             'updated_at': datetime_to_string(self.updated_at)
         }
+
+
+from model.user.user_detail import UserDetails
+from model.user.user_email_verify_token import UserEmailVerifyToken
 
 
 def add_user(user_ag_id=None, username=None, password=None):

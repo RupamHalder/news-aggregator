@@ -63,6 +63,20 @@
     <!--        </div>-->
 
     <!--    </section>&lt;!&ndash; /Blog Posts 2 Section &ndash;&gt;-->
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mt-3">
+        <div class="col-lg-6">
+            <select class="form-select" id="sources" name="sources[]" multiple="multiple">
+                <option value="AL">Alabama</option>
+                <option value="WY">Wyoming</option>
+            </select>
+        </div>
+        <div class="col-lg-6">
+            <button type="submit" class="btn btn-primary btn-sm"
+                                id="btnGetArticle">
+                Search
+            </button>
+        </div>
+    </div>
 
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mt-3">
         {% if articles | length == 0 %}
@@ -101,12 +115,12 @@
                     <div class="d-inline">
                         <button type="submit" class="btn btn-primary btn-sm"
                                 id="btnSaveArticle"
-                                data-title = "{% if article.title != None %}{{ article.title }}{% endif %}"
-                                data-url = "{% if article.url != None %}{{ article.url }}{% endif %}"
-                                data-description = "{% if article.description != None %}{{ article.description }}{% endif %}"
-                                data-article_image_url = "{% if article.urlToImage != None %}{{ article.urlToImage }}{% endif %}"
-                                data-sentiment = "{{ article.sentiment }}"
-                                data-published_at = "{{ article.publishedAt }}"
+                                data-title="{% if article.title != None %}{{ article.title }}{% endif %}"
+                                data-url="{% if article.url != None %}{{ article.url }}{% endif %}"
+                                data-description="{% if article.description != None %}{{ article.description }}{% endif %}"
+                                data-article_image_url="{% if article.urlToImage != None %}{{ article.urlToImage }}{% endif %}"
+                                data-sentiment="{{ article.sentiment }}"
+                                data-published_at="{{ article.publishedAt }}"
                         >
                             Save Article
                         </button>
@@ -149,4 +163,5 @@
 
 {% block page_js %}
 <script src="{{ url_for('static', filename='custom/js/article/article_add.js') }}" type="module"></script>
+<script src="{{ url_for('static', filename='custom/js/article/article_source.js') }}" type="module"></script>
 {% endblock page_js %}

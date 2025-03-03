@@ -50,6 +50,8 @@ class ArticleMessages:
     MISSING_SENTIMENT = '''Sentiment is missing.'''
     MISSING_ARTICLE_ID = '''Article id is missing.'''
 
+    NOT_FOUND_SOURCES = '''No sources found'''
+
     ALREADY_SAVED_ARTICLE = '''This article is already saved.'''
 
     INVALID_SENTIMENT = '''Invalid value for sentiment.'''
@@ -62,6 +64,8 @@ class ArticleMessages:
 
     SUCCESS_SAVE_ARTICLE = '''Article saved successfully'''
     SUCCESS_DELETE_ARTICLE = '''Article deleted successfully'''
+    SUCCESS_SOURCE_FETCH = '''Sources retrieved successfully'''
+    SUCCESS_ARTICLE_FETCH = '''Articles retrieved successfully'''
 
     FAIL_SAVE_ARTICLE = '''Failed to save the article'''
     FAIL_DELETE_ARTICLE = '''Failed to delete the article'''

@@ -1,7 +1,45 @@
 from textblob import TextBlob
 import requests
+from newsapi import NewsApiClient
 
 from conf_enviroment.conf_env import config
+from utils.utility import get_response
+from constants.messages import ArticleMessages
+
+# Initialize News API client
+NEWS_API_KEY = config.NEWS_API_KEY
+newsapi = NewsApiClient(api_key=NEWS_API_KEY)
+
+
+def get_news_sources_service(cleaned_data):
+    page = cleaned_data.get('page')
+    sources = newsapi.get_sources()['sources']  # Retrieve available sources
+    if len(sources) == 0:
+        return get_response(False, ArticleMessages.NOT_FOUND_SOURCES, []), 404
+
+    start_index = 10 * (page - 1)
+    end_index = 10 * page
+    formatted_list = [{
+        "id": s.get('id'),
+        "text": s.get('name')
+    } for s in sources[start_index: end_index]]
+
+    response = get_response(True, ArticleMessages.SUCCESS_SOURCE_FETCH,
+                            formatted_list)
+    response["count"] = len(sources)
+
+    return response, 200
+
+
+def get_articles_service(cleaned_data):
+    sources = cleaned_data.get('sources')
+
+    params = {}
+    if sources:
+        params['sources'] = ','.join(sources)  # Format sources list
+    articles = newsapi.get_top_headlines(**params)
+    return get_response(True, ArticleMessages.SUCCESS_ARTICLE_FETCH,
+                        articles['articles']), 200
 
 
 def get_articles_with_sentiment_by_category(category):

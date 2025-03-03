@@ -3,6 +3,8 @@ from flask_wtf.csrf import CSRFProtect, CSRFError
 from flask_cors import CORS
 
 from conf_enviroment.conf_env import config
+from controller.web_controller.article.article_api_controller import \
+    article_api_controller
 from controller.web_controller.page_controller import page_controller
 from controller.web_controller.user.user_controller import user_controller
 from controller.web_controller.article.article_controller import \
@@ -17,6 +19,7 @@ CORS(app, origins=[])
 app.register_blueprint(page_controller)
 app.register_blueprint(user_controller, url_prefix='/api/v1/user')
 app.register_blueprint(article_controller, url_prefix='/api/v1/article')
+app.register_blueprint(article_api_controller, url_prefix='/api/v1/article_api')
 
 
 @app.errorhandler(CSRFError)

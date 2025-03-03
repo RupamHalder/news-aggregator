@@ -90,6 +90,13 @@ def convert_str_to_float(param):
         return 0
 
 
+def convert_str_to_int(param):
+    try:
+        return int(param)
+    except:
+        return 0
+
+
 def is_str_float(param):
     try:
         float(param)

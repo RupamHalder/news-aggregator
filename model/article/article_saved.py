@@ -9,6 +9,8 @@ from database.db_session import session
 from utils.utility import convert_str_to_float, generate_auto_id, \
     datetime_to_string
 
+from model.user.user import User
+
 
 class SavedArticle(Base):
     __tablename__ = 'article_saved'
