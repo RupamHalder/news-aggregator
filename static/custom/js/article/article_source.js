@@ -2,30 +2,22 @@ import { ArticleJsFunctions, CommonJsFunctions } from '../globalFunctions.js';
 
 $(document).ready(function () {
     // const articleFunctions = new ArticleAddJsFunctions();
-    //    const globalFunctions = new CommonJsFunctions();
+    const globalFunctions = new CommonJsFunctions();
 
-    $('#sources').select2({
-        ajax: {
-            url: '/api/v1/article_api/get_sources',
-            data: function (params) {
-                var query = {
-                    // search: params.term,
-                    page: params.page || 1
-                }
+    $('#sources').select2(globalFunctions.fetchSelect2Data(
+        '/api/v1/article_api/get_sources',
+        'Search for a news source', 0));
 
-                // Query parameters will be ?search=[term]&page=[page]
-                return query;
-            },
-            dataType: 'json',
-            processResults: function (data, params) {
-                params.page = params.page || 1;
-                return {
-                    results: data.data,
-                    pagination: {
-                        more: (params.page * 10) < data.count
-                    }
-                };
-            }
-        }
-    });
+    $('#country').select2(globalFunctions.fetchSelect2Data(
+        '/api/v1/article_api/get_get_country_lang_category?resource_type=country',
+        'Search for a country', 0));
+
+    $('#language').select2(globalFunctions.fetchSelect2Data(
+        '/api/v1/article_api/get_get_country_lang_category?resource_type=language',
+        'Search for a news language', 0));
+
+    $('#category').select2(globalFunctions.fetchSelect2Data(
+        '/api/v1/article_api/get_get_country_lang_category?resource_type=category',
+        'Search for a news category', 0));
+
 });

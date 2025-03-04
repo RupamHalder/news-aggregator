@@ -1,6 +1,8 @@
 class CommonMessages:
     SUCCESS = '''Success.'''
 
+    NOT_FOUND_DATA = '''No data found'''
+
     FAIL_SOMETHING_WENT_WRONG = '''Something went wrong. Please try again later.'''
 
 

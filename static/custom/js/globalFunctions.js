@@ -108,4 +108,31 @@ export class CommonJsFunctions {
             }
         });
     }
+
+    fetchSelect2Data(url, placeholderText, minimumInputLength) {
+        return {
+            ajax: {
+                url: url,
+                data: function (params) {
+                    return {
+                        // q: params.term, // search term
+                        page: params.page || 1
+                    };
+                },
+                dataType: 'json',
+                processResults: function (data, params) {
+                    params.page = params.page || 1;
+                    return {
+                        results: data.data,
+                        pagination: {
+                            more: (params.page * 10) < data.count
+                        }
+                    };
+                },
+                cache: true
+            },
+            placeholder: placeholderText,
+            minimumInputLength: minimumInputLength,
+        }
+    }
 }
