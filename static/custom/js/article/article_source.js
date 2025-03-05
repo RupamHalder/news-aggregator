@@ -1,33 +1,48 @@
 import { ArticleJsFunctions, CommonJsFunctions } from '../globalFunctions.js';
 
 $(document).ready(function () {
-    // const articleFunctions = new ArticleAddJsFunctions();
+    const articleFunctions = new ArticleJsFunctions();
     const globalFunctions = new CommonJsFunctions();
 
     var countrySelection = $('#country').select2(globalFunctions.fetchSelect2Data(
         '/api/v1/article_api/get_country_lang_category?resource_type=country',
         'Search for a country', 0, {}));
 
-    countrySelection.on("change", function (e) { 
-        console.log("chang")
-        $('#sources').trigger('change'); 
+    countrySelection.on("change", function (e) {
+        $('#sources').val(null).trigger('change');
+        let otherParams = articleFunctions.genGetSourcesAPIRequest();
+        $('#sources').select2(globalFunctions.fetchSelect2Data(
+            '/api/v1/article_api/get_sources',
+            'Search for a news source', 0, otherParams));
     });
 
-    var countrySelection = $('#language').select2(globalFunctions.fetchSelect2Data(
+    var languageSelection = $('#language').select2(globalFunctions.fetchSelect2Data(
         '/api/v1/article_api/get_country_lang_category?resource_type=language',
         'Search for a news language', 0, {}));
 
-    var countrySelection = $('#category').select2(globalFunctions.fetchSelect2Data(
+    languageSelection.on("change", function (e) {
+        $('#sources').val(null).trigger('change');
+        let otherParams = articleFunctions.genGetSourcesAPIRequest();
+        $('#sources').select2(globalFunctions.fetchSelect2Data(
+            '/api/v1/article_api/get_sources',
+            'Search for a news source', 0, otherParams));
+    });
+
+    var categorySelection = $('#category').select2(globalFunctions.fetchSelect2Data(
         '/api/v1/article_api/get_country_lang_category?resource_type=category',
         'Search for a news category', 0, {}));
 
-    var sourcesSelection = $('#sources').select2(globalFunctions.fetchSelect2Data(
+    categorySelection.on("change", function (e) {
+        $('#sources').val(null).trigger('change');
+        let otherParams = articleFunctions.genGetSourcesAPIRequest();
+        $('#sources').select2(globalFunctions.fetchSelect2Data(
+            '/api/v1/article_api/get_sources',
+            'Search for a news source', 0, otherParams));
+    });
+
+    $('#sources').select2(globalFunctions.fetchSelect2Data(
         '/api/v1/article_api/get_sources',
-        'Search for a news source', 0, {
-            language: $("#language").val() || null,
-            country: $("#country").val() || null,
-            category: $("#category").val() || null
-        }));
+        'Search for a news source', 0, {}));
 
     $(document).on('click', '#btnGetArticle', function () {
         let apiURL = '/api/v1/article_api/get_articles';

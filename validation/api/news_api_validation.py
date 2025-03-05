@@ -1,5 +1,5 @@
 from constants.messages import CommonMessages
-from utils.utility import get_response, convert_str_to_int, is_param_empty
+from utils.utility import convert_empty_str_to_none, get_response, convert_str_to_int, is_param_empty
 
 
 def get_articles_field_validation(request):
@@ -9,7 +9,7 @@ def get_articles_field_validation(request):
     language = data.get('language', '').strip()
     country = data.get('country', '').strip()
     category = data.get('category', '').strip()
-    page_size = data.get('page_size', 10).strip()
+    page_size = data.get('page_size', 10)
     page = data.get('page', 1)
 
     print(sources, news_query, language, country, category, page_size, page)
@@ -27,21 +27,24 @@ def get_articles_field_validation(request):
 
 def get_news_sources_field_validation(request):
     data = request.args
-    language = data.get('language', '').strip()
-    country = data.get('country', '').strip()
-    category = data.get('category', '').strip()
+    language = data.get('language', None)
+    country = data.get('country', None)
+    category = data.get('category', None)
+    q = data.get('q', '').strip()
     page = data.get('page', 1)
 
     return get_response(True, CommonMessages.SUCCESS, {
         "page": convert_str_to_int(page),
-        "language": None if is_param_empty(language) else language,
-        "country": None if is_param_empty(country) else country,
-        "category": None if is_param_empty(category) else category
+        "q": q,
+        "language": language,
+        "country": country,
+        "category": category
     }), 200
 
 
 def get_country_lang_category_field_validation(request):
     data = request.args
+    q = data.get('q', '').strip()
     page = data.get('page', 1)
     resource_type = data.get('resource_type', '')
 
@@ -53,5 +56,6 @@ def get_country_lang_category_field_validation(request):
 
     return get_response(True, CommonMessages.SUCCESS, {
         "page": convert_str_to_int(page),
+        "q": q,
         "resource_type": resource_type,
     }), 200

@@ -8,6 +8,21 @@ export class RegisterJsFunctions {
 
 export class ArticleJsFunctions {
     constructor() { }
+
+    genGetSourcesAPIRequest() {
+        let language = $("#language").val();
+        let country = $("#country").val();
+        let category  = $("#category").val();
+        let otherParams = {}
+        if (language != null) {
+            otherParams.language = language;
+        }if (country != null) {
+            otherParams.country = country;
+        }if (category != null) {
+            otherParams.category = category;
+        }
+        return otherParams
+    }
 }
 
 // common functions
@@ -109,16 +124,15 @@ export class CommonJsFunctions {
         });
     }
 
-    fetchSelect2Data(url, placeholderText, minimumInputLength, extra_params) {
-        console.log("extra_params: ", extra_params);
+    fetchSelect2Data(url, placeholderText, minimumInputLength, extraParams) {
         return {
             ajax: {
                 url: url,
                 data: function (params) {
                     return Object.assign({}, {
-                        // q: params.term, // search term
+                        q: params.term, // search term
                         page: params.page || 1
-                    }, extra_params);
+                    }, extraParams);
                 },
                 dataType: 'json',
                 processResults: function (data, params) {
@@ -130,7 +144,7 @@ export class CommonJsFunctions {
                         }
                     };
                 },
-                cache: true
+                // cache: true
             },
             placeholder: placeholderText,
             minimumInputLength: minimumInputLength,

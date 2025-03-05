@@ -83,6 +83,10 @@ def is_param_empty(param):
         return False
 
 
+def convert_empty_str_to_none(param):
+    return None if param is None or param == "" else param
+
+
 def convert_str_to_float(param):
     try:
         return float(param)

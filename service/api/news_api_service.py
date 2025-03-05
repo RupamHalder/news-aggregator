@@ -4,7 +4,7 @@ from newsapi import NewsApiClient
 
 from conf_enviroment.conf_env import config
 from constants.constants import Constants
-from utils.utility import get_response
+from utils.utility import get_response, is_param_empty
 from constants.messages import ArticleMessages, CommonMessages
 
 # Initialize News API client
@@ -15,6 +15,7 @@ newsapi = NewsApiClient(api_key=NEWS_API_KEY)
 # category=None, language=None, country=None
 def get_news_sources_service(cleaned_data):
     page = cleaned_data.get('page')
+    q = cleaned_data.get('q')
 
     params = {
         'language': cleaned_data.get('language'),
@@ -25,6 +26,9 @@ def get_news_sources_service(cleaned_data):
     sources = newsapi.get_sources(**params)['sources']  # Retrieve available sources
     if len(sources) == 0:
         return get_response(False, ArticleMessages.NOT_FOUND_SOURCES, []), 404
+    
+    if not is_param_empty(q):
+        sources = [s for s in sources if q in s.get('name')]
 
     start_index = 10 * (page - 1)
     end_index = 10 * page
@@ -42,6 +46,7 @@ def get_news_sources_service(cleaned_data):
 
 def get_country_lang_category_service(cleaned_data):
     page = cleaned_data.get('page')
+    q = cleaned_data.get('q')
     resource_type = cleaned_data.get('resource_type')
     if resource_type == "country":
         sources = Constants.COUNTRY_CODE
@@ -54,6 +59,9 @@ def get_country_lang_category_service(cleaned_data):
 
     if len(sources) == 0:
         return get_response(False, CommonMessages.NOT_FOUND_DATA, []), 404
+    
+    if not is_param_empty(q):
+        sources = [s for s in sources if q.lower() in s.get('text').lower()]
 
     start_index = 10 * (page - 1)
     end_index = 10 * page
