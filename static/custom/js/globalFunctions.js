@@ -109,15 +109,16 @@ export class CommonJsFunctions {
         });
     }
 
-    fetchSelect2Data(url, placeholderText, minimumInputLength) {
+    fetchSelect2Data(url, placeholderText, minimumInputLength, extra_params) {
+        console.log("extra_params: ", extra_params);
         return {
             ajax: {
                 url: url,
                 data: function (params) {
-                    return {
+                    return Object.assign({}, {
                         // q: params.term, // search term
                         page: params.page || 1
-                    };
+                    }, extra_params);
                 },
                 dataType: 'json',
                 processResults: function (data, params) {

@@ -12,10 +12,6 @@ from validation.api.news_api_validation import get_articles_field_validation, ge
 
 article_api_controller = Blueprint('article_api_controller', __name__)
 
-# Initialize News API client
-NEWS_API_KEY = config.NEWS_API_KEY
-newsapi = NewsApiClient(api_key=NEWS_API_KEY)
-
 
 @article_api_controller.route('/get_sources', methods=['GET'])
 def get_sources():
@@ -50,7 +46,7 @@ def get_articles():
                             {}), 500
 
 
-@article_api_controller.route('/get_get_country_lang_category', methods=['GET'])
+@article_api_controller.route('/get_country_lang_category', methods=['GET'])
 def get_get_country_lang_category():
     try:
         field_validation, status_code = get_country_lang_category_field_validation(

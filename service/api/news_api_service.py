@@ -15,7 +15,14 @@ newsapi = NewsApiClient(api_key=NEWS_API_KEY)
 # category=None, language=None, country=None
 def get_news_sources_service(cleaned_data):
     page = cleaned_data.get('page')
-    sources = newsapi.get_sources()['sources']  # Retrieve available sources
+
+    params = {
+        'language': cleaned_data.get('language'),
+        'country': cleaned_data.get('country'),
+        'category': cleaned_data.get('category')
+    }
+
+    sources = newsapi.get_sources(**params)['sources']  # Retrieve available sources
     if len(sources) == 0:
         return get_response(False, ArticleMessages.NOT_FOUND_SOURCES, []), 404
 
@@ -61,16 +68,20 @@ def get_articles_service(cleaned_data):
     sources = cleaned_data.get('sources')
     print(sources)
 
-    params = {}
-    params['sources'] = ','.join(sources)
-    params['q'] = cleaned_data.get('q')
-    params['language'] = cleaned_data.get('language')
-    params['country'] = cleaned_data.get('country')
-    params['category'] = cleaned_data.get('category')
-    params['page_size'] = cleaned_data.get('page_size')
-    params['page'] = cleaned_data.get('page')
+    params = {
+        'sources': ','.join(sources),
+        'q': cleaned_data.get('news_query'),
+        'language': cleaned_data.get('language'),
+        'country': cleaned_data.get('country'),
+        'category': cleaned_data.get('category'),
+        'page_size': cleaned_data.get('page_size'),
+        'page': cleaned_data.get('page'),
+    }
 
     articles = newsapi.get_top_headlines(**params)
+    print("\n\n\n")
+    print(articles)
+    print("\n\n\n")
     return get_response(True, ArticleMessages.SUCCESS_ARTICLE_FETCH,
                         articles['articles']), 200
 
