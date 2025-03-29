@@ -12,8 +12,6 @@ def get_articles_field_validation(request):
     page_size = data.get('page_size', 10)
     page = data.get('page', 1)
 
-    print(sources, news_query, language, country, category, page_size, page)
-
     return get_response(True, CommonMessages.SUCCESS, {
         "sources": sources,
         "news_query": news_query,

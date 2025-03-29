@@ -53,13 +53,14 @@ $(document).ready(function () {
             language: $("#language").val(),
             country: $("#country").val(),
             category: $("#category").val(),
-            page_size: $("#page_size").val(),
-            page: $("#page").val(),
+            page_size: 5,
+            page: 1,
         });
         let dataType = 'json';
         let processingButton = this;
         let postProcessing = (responseData) => {
             // window.location.href = '/saved-articles';
+            articleFunctions.loadArticlesFromData(responseData.articles, responseData.is_logged_in)
         }
         let showSuccessMessage = true;
         globalFunctions.performPostAPICall(apiURL, method, data, dataType,

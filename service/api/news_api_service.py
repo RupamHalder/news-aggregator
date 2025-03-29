@@ -1,7 +1,10 @@
+import json
 from textblob import TextBlob
 import requests
 from newsapi import NewsApiClient
+from flask import url_for
 
+from app_session.user_session import is_logged_in_user
 from conf_enviroment.conf_env import config
 from constants.constants import Constants
 from utils.utility import get_response, is_param_empty
@@ -74,24 +77,27 @@ def get_country_lang_category_service(cleaned_data):
 
 def get_articles_service(cleaned_data):
     sources = cleaned_data.get('sources')
-    print(sources)
 
     params = {
         'sources': ','.join(sources),
         'q': cleaned_data.get('news_query'),
         'language': cleaned_data.get('language'),
-        'country': cleaned_data.get('country'),
-        'category': cleaned_data.get('category'),
+        # 'country': cleaned_data.get('country'),
+        # 'category': cleaned_data.get('category'),
         'page_size': cleaned_data.get('page_size'),
         'page': cleaned_data.get('page'),
     }
 
     articles = newsapi.get_top_headlines(**params)
-    print("\n\n\n")
-    print(articles)
-    print("\n\n\n")
+    print(articles["articles"])
+    for article in articles:
+        article['urlToImage'] = article['urlToImage'] if article['urlToImage'] else url_for('static', filename='assets/img/no-image.jpg')
+        article['publishedAt'] = article['publishedAt'].split('T')[0]
     return get_response(True, ArticleMessages.SUCCESS_ARTICLE_FETCH,
-                        articles['articles']), 200
+                        {
+                            'articles': articles['articles'],
+                            'is_logged_in': is_logged_in_user()
+                        }), 200
 
 
 def get_articles_with_sentiment_by_category(category):

@@ -56,3 +56,10 @@ def is_user_logged_in(resource_type):
         return wrapper
 
     return decorator_wrapper
+
+
+def is_logged_in_user():
+    try:
+        return session['is_logged_in']
+    except Exception as e:
+        return False

@@ -40,7 +40,7 @@ def get_articles():
             return field_validation, status_code
 
     except Exception as e:
-        print("Error in delete_article API: " + str(e))
+        print("Error in get_articles API: " + str(e))
         print(traceback.format_exc())
         return get_response(False, CommonMessages.FAIL_SOMETHING_WENT_WRONG,
                             {}), 500
