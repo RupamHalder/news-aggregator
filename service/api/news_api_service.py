@@ -89,13 +89,13 @@ def get_articles_service(cleaned_data):
     }
 
     articles = newsapi.get_top_headlines(**params)
-    print(articles["articles"])
+    articles = articles["articles"]
     for article in articles:
         article['urlToImage'] = article['urlToImage'] if article['urlToImage'] else url_for('static', filename='assets/img/no-image.jpg')
         article['publishedAt'] = article['publishedAt'].split('T')[0]
     return get_response(True, ArticleMessages.SUCCESS_ARTICLE_FETCH,
                         {
-                            'articles': articles['articles'],
+                            'articles': articles,
                             'is_logged_in': is_logged_in_user()
                         }), 200
 
